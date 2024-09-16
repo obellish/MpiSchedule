@@ -3,7 +3,6 @@
 @using Microsoft.EntityFrameworkCore
 @using MpiSchedule.Data
 @inject IDbContextFactory<PressScheduleContext> DbFactory
-@inject IModalService Modal
 
 <PressDropdown ValueChanged="OnValueChanged" />
 
@@ -17,8 +16,12 @@
                  GetBackgroundColor="job => BackgroundColorForShift(job.Shift)"
                  GetForegroundColor="job => ForegroundColorForShift(job.Shift)" />
 
+<Modal @ref="modal" />
+
 @code
 {
+    private Modal? modal;
+
     private readonly DateTime today = DateTime.Today;
 
     private readonly List<PressJob> jobList = [];
@@ -58,10 +61,16 @@
 
         await db.Attach(job).Reference(j => j.Press).LoadAsync();
 
-        var parameters = new ModalParameters().Add(nameof(PressJobInfoModal.Job), job);
+        var parameters = new Dictionary<string, object>
+        {
+            { nameof(PressJobInfoModal.Job), job },
+            { nameof(PressJobInfoModal.CloseCommand), EventCallback.Factory.Create(this, CloseModal) },
+        };
 
-        Modal.Show<PressJobInfoModal>("Job Info", parameters);
+        await modal?.ShowAsync<PressJobInfoModal>(title: "Job Info", parameters: parameters)!;
     }
+
+    private async Task CloseModal() => await modal?.HideAsync()!;
 
     private static string BackgroundColorForShift(Shift shift) => shift switch
     {

@@ -24,17 +24,17 @@
     <p>Due date: <code>@Job.DueDate.Date.ToString("MM/dd/yyyy")</code></p>
     
     <p>Authenticated: @Authenticated</p>
-
-    <button class="btn btn-primary" @onclick="Close">Close</button>
+    
+    <button class="btn btn-primary" @onclick="CloseCommand">Close</button>
 </div>
 
 @code
 {
-    [CascadingParameter]
-    public BlazoredModalInstance BlazoredModal { get; set; } = default!;
-
     [Parameter]
     public PressJob Job { get; set; }
+
+    [Parameter]
+    public EventCallback CloseCommand { get; set; }
 
     private bool Authenticated { get; set; }
 
@@ -45,5 +45,8 @@
         Data.Shift.Third => "Third",
     };
 
-    private async Task Close() => await BlazoredModal.CloseAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        Authenticated = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated ?? false;
+    }
 }
