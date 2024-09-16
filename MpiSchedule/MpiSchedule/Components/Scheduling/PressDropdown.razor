@@ -1,6 +1,6 @@
 ﻿@using Microsoft.EntityFrameworkCore
 @using MpiSchedule.Data
-@rendermode @(new InteractiveAutoRenderMode(prerender: false))
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IDbContextFactory<PressScheduleContext> DbFactory
 
 <select id="dropdown-selector" @onchange="OnValueChanged">

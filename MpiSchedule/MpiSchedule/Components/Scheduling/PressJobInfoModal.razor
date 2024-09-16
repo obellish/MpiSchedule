@@ -1,4 +1,5 @@
 ﻿@using MpiSchedule.Data
+@inject AuthenticationStateProvider AuthenticationStateProvider
 <div>
     <p>Name: <code>@Job.Name</code></p>
 
@@ -21,6 +22,8 @@
     <br />
 
     <p>Due date: <code>@Job.DueDate.Date.ToString("MM/dd/yyyy")</code></p>
+    
+    <p>Authenticated: @Authenticated</p>
 
     <button class="btn btn-primary" @onclick="Close">Close</button>
 </div>
@@ -32,6 +35,8 @@
 
     [Parameter]
     public PressJob Job { get; set; }
+
+    private bool Authenticated { get; set; }
 
     private string Shift => Job.Shift switch
     {

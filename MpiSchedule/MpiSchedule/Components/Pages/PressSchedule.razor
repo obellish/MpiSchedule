@@ -1,5 +1,5 @@
 ﻿@page "/press-schedule"
-@rendermode @(new InteractiveAutoRenderMode(prerender: false))
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using Microsoft.EntityFrameworkCore
 @using MpiSchedule.Data
 @inject IDbContextFactory<PressScheduleContext> DbFactory
