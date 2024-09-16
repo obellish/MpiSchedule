@@ -1,0 +1,266 @@
+﻿@* ReSharper disable once CSharpWarnings::CS0693 *@
+@typeparam TModel
+@using System.Globalization
+@inherits CalendarBase<TModel>
+
+@{
+    FirstDate = new DateTime(FirstDate.Year, FirstDate.Month, 1);
+    var firstDayWeek = (int)FirstDate.DayOfWeek;
+    var dayNames = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames;
+    var state = StateCase.Before;
+    var lastDay = new DateTime(FirstDate.Year, FirstDate.Month, 1).AddMonths(1);
+    var dayCounter = FirstDate;
+    var today = DateTime.Today;
+    var offsetCell = 0;
+    var cssToday = string.Empty;
+
+    Values = Values?.OrderBy(x => GetStartDate(x))
+        .ThenByDescending(
+            x => GetEndDate?.Invoke(x) ?? GetStartDate(x))
+        .ToList();
+}
+
+<div class="monthly-calendar" style="@Style">
+    @for (var i = 0; i < 7; i++)
+    {
+        var d = GetNumberOfDay(i);
+
+        <span class="header-name noselect" style="@HeaderStyle">
+            @dayNames[d]
+        </span>
+    }
+
+    @for (var i = 0; i < 40; i++)
+    {
+        string? cssBackground;
+        if (state is StateCase.Before)
+        {
+            if (firstDayWeek == GetNumberOfDay(i))
+            {
+                state = StateCase.InMonth;
+                var dayClick = dayCounter;
+                cssBackground = GetBackground(dayClick);
+                <div class="fade-in monthly-day noselect"
+                     style="@cssBackground"
+                     ondragover="event.preventDefault();">
+                    @(dayCounter.Day.ToString())
+                </div>
+                dayCounter = dayCounter.AddDays(1);
+                offsetCell = i;
+            }
+            else
+            {
+                <div class="monthly-day disabled cursor-top"></div>
+            }
+        }
+
+        if (state is StateCase.InMonth)
+        {
+            if (dayCounter >= lastDay)
+            {
+                state = StateCase.After;
+                <div class="monthly-day disabled cursor-bottom"></div>
+            }
+            else
+            {
+                var dayClick = dayCounter;
+                cssBackground = GetBackground(dayClick);
+                if (HighlightToday)
+                {
+                    cssToday = dayCounter == today ? "monthly-today" : null;
+                }
+
+                <div class="fade-in monthly-day noselect @cssToday"
+                     style="@cssBackground"
+                     ondragover="event.preventDefault();">
+                    @(dayCounter.Day.ToString())
+                </div>
+                dayCounter = dayClick.AddDays(1);
+            }
+        }
+
+        if (state is StateCase.After)
+        {
+            <div class="monthly-day disabled cursor-bottom"></div>
+        }
+    }
+
+    @if (Values is { Count: > 0 })
+    {
+        var occupiedPositions = new OccupiedPositions();
+        for (var i = 0; i < 32; i++)
+        {
+            occupiedPositions[i] = new TaskPosition();
+        }
+
+        var index = -1;
+
+        foreach (var value in Values)
+        {
+            var taskContent = GetValueContent(value);
+            checked
+            {
+                index++;
+            }
+            var startDate = GetStartDate(value);
+            var endDate = GetEndDate?.Invoke(value) ?? startDate;
+
+            if ((startDate.Date <= FirstDate && FirstDate <= endDate.Date) ||
+            (startDate.Date > FirstDate && lastDay > endDate.Date) ||
+            (startDate.Date < lastDay && lastDay <= endDate.Date))
+            {
+                var start = startDate.Date < FirstDate ? FirstDate : startDate.Date;
+                var end = endDate.Date >= lastDay ? lastDay.AddDays(-1) : endDate.Date;
+
+                var x = ((start.Day + offsetCell - 1) % 7) + 1;
+                var y = ((start.Day + offsetCell - 1) / 7) + 2;
+                var s = (int)(end.Date - start.Date).TotalDays + 1;
+
+                string? classPosition = null;
+
+                var position = occupiedPositions[start.Day];
+
+                if (!position.Top)
+                {
+                    for (var i = start.Day; i < start.Day + s; ++i)
+                    {
+                        occupiedPositions[i].Top = true;
+                    }
+
+                    classPosition = "monthly-task-first";
+                }
+                else if (!position.Center)
+                {
+                    for (var i = start.Day; i < start.Day + s; ++i)
+                    {
+                        occupiedPositions[i].Center = true;
+                    }
+
+                    classPosition = "monthly-task-second";
+                }
+                else if (!position.Bottom)
+                {
+                    for (var i = start.Day; i < start.Day + s; ++i)
+                    {
+                        occupiedPositions[i].Bottom = true;
+                    }
+
+                    classPosition = "monthly-task-bottom";
+                }
+
+                var borderClass = "border-start";
+                bool onMultiLine;
+                do
+                {
+                    var row = $"grid-column:{x} / span {s}; grid-row:{y};";
+
+                    if (classPosition is not null)
+                    {
+                        if (startDate.Hour + startDate.Minute > 0)
+                        {
+                            taskContent = $"{startDate:t} {taskContent}";
+                        }
+
+                        var taskColor = $"background-color:{GetBackgroundColor(value)};";
+
+                        if (GetForegroundColor is not null)
+                        {
+                            taskColor += $"color:{GetForegroundColor(value)};";
+                        }
+
+                        <div class="fade-in monthly-task @borderClass cursor-pointer @classPosition"
+                             id="task-@index"
+                             style="@row @taskColor"
+                             draggable="false"
+                             @onclick="_ => ClickValueInternal(value)">
+                            @taskContent
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="fade-in monthly-more-tasks noselect"
+                             style=@($"grid-column:{x} / span 1; grid-row:{y}; {GetBackground(start)}")>
+                            @($"+ {occupiedPositions[start.Day].Counter - 2} ...")
+                        </div>
+                    }
+
+                    onMultiLine = false;
+                    if (x + s > 8)
+                    {
+                        onMultiLine = true;
+
+                        start = start.AddDays(8 - x);
+                        end = endDate.Date >= lastDay ? lastDay.AddDays(-1) : endDate.Date;
+
+                        x = ((start.Day + offsetCell - 1) % 7) + 1;
+                        y = ((start.Day + offsetCell - 1) / 7) + 2;
+                        s = (int)(end.Date - start.Date).TotalDays + 1;
+
+                        borderClass = string.Empty;
+                    }
+                }
+                while (onMultiLine);
+
+                start = startDate.Date < FirstDate ? FirstDate : startDate.Date;
+                end = endDate.Date >= lastDay ? lastDay.AddDays(-1) : endDate.Date;
+
+                for (var d = start.Day; d <= end.Day; d++)
+                {
+                    occupiedPositions[d].Counter++;
+                }
+            }
+        }
+    }
+</div>
+
+@code
+{
+    private DateTime firstDate;
+
+    [Parameter]
+    public DateTime FirstDate
+    {
+        get
+        {
+            if (firstDate == default)
+            {
+                FirstDate = DateTime.Today;
+            }
+
+            return firstDate;
+        }
+
+        set => firstDate = value;
+    }
+
+    [Parameter]
+    public bool HighlightToday { get; set; }
+
+    private string GetBackground(DateTime day) => day.DayOfWeek switch
+    {
+        DayOfWeek.Saturday => $"background:{SaturdayColor}",
+        DayOfWeek.Sunday => $"background:{SundayColor}",
+        _ => $"background:{WeekDaysColor}",
+    };
+
+    private enum StateCase
+    {
+        Before,
+        InMonth,
+        After,
+    }
+
+    private struct TaskPosition
+    {
+        public int Counter;
+        public bool Top;
+        public bool Center;
+        public bool Bottom;
+    }
+
+    [System.Runtime.CompilerServices.InlineArray(32)]
+    private struct OccupiedPositions
+    {
+        private TaskPosition firstElement;
+    }
+}

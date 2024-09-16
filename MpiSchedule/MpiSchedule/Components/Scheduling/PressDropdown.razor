@@ -1,0 +1,50 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using MpiSchedule.Data
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
+@inject IDbContextFactory<PressScheduleContext> DbFactory
+
+<select id="dropdown-selector" @onchange="OnValueChanged">
+    <option value="-1">Select...</option>
+    @if (presses is not null)
+    {
+        @foreach (var press in presses)
+        {
+            <option value="@press.PressId">@press.Name</option>
+        }
+    }
+</select>
+
+@code
+{
+    private List<Press>? presses;
+
+    [Parameter]
+    public Press? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Press> ValueChanged { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+
+        presses = await context.Presses.ToListAsync();
+    }
+
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var pressId) && pressId > 0)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+
+            Value = await context.Presses.FindAsync(pressId);
+
+            if (Value is not null)
+            {
+                await context.Entry(Value).Collection(p => p.Jobs).LoadAsync();
+            }
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+}

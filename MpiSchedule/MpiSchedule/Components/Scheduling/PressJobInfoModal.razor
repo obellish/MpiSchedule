@@ -1,0 +1,44 @@
+﻿@using MpiSchedule.Data
+<div>
+    <p>Name: <code>@Job.Name</code></p>
+
+    <br />
+
+    <p>Job Number: <code>@Job.JobNumber</code></p>
+
+    <br />
+
+    <p>Scheduled to run: <code>@Job.Date.Date.ToString("MM/dd/yyyy")</code> on <code>@Shift</code> shift</p>
+
+    <br />
+
+    <p>Quantity: <code>@Job.Quantity</code></p>
+
+    <br />
+
+    <p>Quantity already ran: <code>@Job.QuantityRan</code></p>
+
+    <br />
+
+    <p>Due date: <code>@Job.DueDate.Date.ToString("MM/dd/yyyy")</code></p>
+
+    <button class="btn btn-primary" @onclick="Close">Close</button>
+</div>
+
+@code
+{
+    [CascadingParameter]
+    public BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    [Parameter]
+    public PressJob Job { get; set; }
+
+    private string Shift => Job.Shift switch
+    {
+        Data.Shift.First => "First",
+        Data.Shift.Second => "Second",
+        Data.Shift.Third => "Third",
+    };
+
+    private async Task Close() => await BlazoredModal.CloseAsync();
+}

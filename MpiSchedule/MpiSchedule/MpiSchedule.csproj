@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<UserSecretsId>aspnet-MpiSchedule-a06fd357-918f-4544-9955-16f49eb401eb</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MpiSchedule.Client\MpiSchedule.Client.csproj" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.7" />
+		<PackageReference Include="Blazored.Modal" Version="7.3.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.8" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Data\Database\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\Scheduling\PressDropdown.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Components\Pages\Auth.razor" />
+	  <_ContentIncludedByDefault Remove="Components\Scheduling\PressDropdown.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\Pages\Auth.razor" />
+	</ItemGroup>
+
+</Project>

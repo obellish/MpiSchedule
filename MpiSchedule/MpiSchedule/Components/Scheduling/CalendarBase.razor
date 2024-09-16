@@ -1,0 +1,87 @@
+﻿@using System.Globalization
+@typeparam TModel
+
+@code
+{
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string HeaderStyle { get; set; }
+
+    [Parameter]
+    public string WeekDaysColor { get; set; } = "#FFF";
+
+    [Parameter]
+    public string SaturdayColor { get; set; } = "#ECF4FD";
+
+    [Parameter]
+    public string SundayColor { get; set; } = "#DBE7F8";
+
+    [Parameter]
+    public IList<TModel>? Values { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public Func<TModel, DateTime> GetStartDate { get; set; } = null!;
+
+    [Parameter]
+    public Func<TModel, DateTime>? GetEndDate { get; set; }
+
+    [Parameter]
+    public Func<TModel, string>? GetValueContent { get; set; } = model => model?.ToString() ?? string.Empty;
+
+    [Parameter]
+    public Func<TModel, string>? GetBackgroundColor { get; set; } = _ => "#FFFFFF";
+
+    [Parameter]
+    public Func<TModel, string>? GetForegroundColor { get; set; } = _ => "#000000";
+
+    [Parameter]
+    public EventCallback<TModel> ValueClick { get; set; }
+
+    protected static int GetNumberOfDay(int numOfDay)
+    {
+        switch (numOfDay)
+        {
+            case < 0:
+                return 0;
+            case > 6:
+                numOfDay %= 7;
+                break;
+        }
+
+        var firstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
+
+        switch (firstDayOfWeek)
+        {
+            case DayOfWeek.Saturday when numOfDay is 0:
+                numOfDay = 6;
+                break;
+            case DayOfWeek.Saturday when numOfDay is 7:
+                numOfDay = 0;
+                break;
+            case DayOfWeek.Monday:
+                {
+                    if (numOfDay >= 0)
+                    {
+                        numOfDay++;
+                    }
+
+                    if (numOfDay is 7)
+                    {
+                        numOfDay = 0;
+                    }
+
+                    break;
+                }
+        }
+
+        return numOfDay;
+    }
+
+    protected async Task ClickValueInternal(TModel task) => await ValueClick.InvokeAsync(task);
+}

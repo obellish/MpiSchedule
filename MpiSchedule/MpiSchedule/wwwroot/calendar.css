@@ -1,0 +1,49 @@
+﻿.hidden-element {
+    display: none !important;
+}
+
+.noselect {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-top {
+    cursor: n-resize;
+}
+
+.cursor-bottom {
+    cursor: s-resize;
+}
+
+.header-name {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #72777b;
+    text-align: center;
+    border-bottom: 1px solid #a6a8b3;
+    border-bottom: 1px solid rgba(166, 168, 179, 0.12);
+    line-height: 6vh;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: #fff;
+}
+
+.fade-in {
+    animation: fadeIn 0.4s;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

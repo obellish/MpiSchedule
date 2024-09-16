@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MpiSchedule", "MpiSchedule\MpiSchedule\MpiSchedule.csproj", "{C5E9D58D-81CC-4A00-B3C2-942F2D19B6D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MpiSchedule.Client", "MpiSchedule\MpiSchedule.Client\MpiSchedule.Client.csproj", "{83535186-74D3-48C7-B9CB-8C4C1396118F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BF0DF3D7-281A-4935-A387-F3FF76DA514B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5E9D58D-81CC-4A00-B3C2-942F2D19B6D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5E9D58D-81CC-4A00-B3C2-942F2D19B6D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5E9D58D-81CC-4A00-B3C2-942F2D19B6D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5E9D58D-81CC-4A00-B3C2-942F2D19B6D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83535186-74D3-48C7-B9CB-8C4C1396118F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83535186-74D3-48C7-B9CB-8C4C1396118F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83535186-74D3-48C7-B9CB-8C4C1396118F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83535186-74D3-48C7-B9CB-8C4C1396118F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1986EB2-AE16-499D-B1C0-35DA81B95D97}
+	EndGlobalSection
+EndGlobal

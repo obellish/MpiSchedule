@@ -1,0 +1,60 @@
+﻿@page "/testing"
+@using MpiSchedule.Data
+@rendermode InteractiveServer
+
+<PageTitle>Testing</PageTitle>
+
+<p>This is where I test stuff</p>
+
+<PressDropdown @bind-Value="selectedPress" />
+
+<br />
+
+<MonthlyCalendar Values="models" GetStartDate="m => m.Day" GetValueContent="m => m.ToString()" HighlightToday="true" />
+
+<br />
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code
+{
+    private readonly List<FakeModel> models = [];
+
+    private Press? selectedPress;
+
+    private int currentCount;
+
+    private void IncrementCount() => currentCount++;
+
+    protected override void OnInitialized()
+    {
+        for (var d = DateTime.Today; d < DateTime.Today.AddDays(7); d = d.AddDays(1))
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                models.Add(new FakeModel(i, d));
+            }
+        }
+    }
+
+    private class FakeModel(int id, DateTime day)
+    {
+        private FakeModel(int id)
+            : this(id, DateTime.Today)
+        {
+        }
+
+        private FakeModel()
+            : this(0)
+        {
+        }
+ 
+        public DateTime Day { get; set; } = day;
+
+        public override string ToString() => $"Task #{id}";
+    }
+}
