@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240917145836_Initial")]
+    [Migration("20240917160242_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -35,6 +35,9 @@ namespace MpiSchedule.Migrations
                         .HasColumnType("BLOB");
 
                     b.HasKey("PressId");
+
+                    b.HasIndex("PressId")
+                        .IsUnique();
 
                     b.ToTable("Presses");
 
@@ -117,6 +120,9 @@ namespace MpiSchedule.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PressId");
+
+                    b.HasIndex("Id", "JobNumber")
+                        .IsUnique();
 
                     b.ToTable("Jobs");
                 });

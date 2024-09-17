@@ -69,9 +69,21 @@ namespace MpiSchedule.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Jobs_Id_JobNumber",
+                table: "Jobs",
+                columns: new[] { "Id", "JobNumber" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_PressId",
                 table: "Jobs",
                 column: "PressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Presses_PressId",
+                table: "Presses",
+                column: "PressId",
+                unique: true);
         }
 
         /// <inheritdoc />
