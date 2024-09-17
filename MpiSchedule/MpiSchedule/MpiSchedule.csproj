@@ -25,7 +25,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Components\ConcurrencyField.razor" />
+	  <_ContentIncludedByDefault Remove="Components\Pages\EditJob.razor" />
 	  <_ContentIncludedByDefault Remove="Components\Scheduling\PressDropdown.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\Pages\EditJob.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\ConcurrencyField.razor" />
 	</ItemGroup>
 
 </Project>

@@ -19,6 +19,9 @@
     private List<Press>? presses;
 
     [Parameter]
+    public bool LoadJobs { get; set; }
+
+    [Parameter]
     public Press? Value { get; set; }
 
     [Parameter]
@@ -37,12 +40,7 @@
         {
             await using var context = await DbFactory.CreateDbContextAsync();
 
-            Value = await context.Presses.FindAsync(pressId);
-
-            if (Value is not null)
-            {
-                await context.Entry(Value).Collection(p => p.Jobs).LoadAsync();
-            }
+            Value = await context.FindPress(pressId, LoadJobs);
 
             await ValueChanged.InvokeAsync(Value);
         }

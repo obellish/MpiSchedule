@@ -1,14 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace MpiSchedule.Data;
 
 public class PressScheduleContext(DbContextOptions<PressScheduleContext> options, ILogger<PressScheduleContext> logger) : DbContext(options)
 {
-    public DbSet<Press> Presses { get; set; }
+    public DbSet<Press> Presses { get; set; } = default!;
 
-    public DbSet<PressJob> Jobs { get; set; }
+    public DbSet<PressJob> Jobs { get; set; } = default!;
+
+    public async Task<Press?> FindPress(int id, bool loadJobs = false)
+    {
+        if (loadJobs)
+        {
+            return await Presses.Include(p => p.Jobs).FirstOrDefaultAsync(p => p.PressId == id);
+        }
+
+        return await Presses.FindAsync(id);
+    }
+
+    public async Task<PressJob?> FindJob(int id, bool loadPress = false)
+    {
+        if (loadPress)
+        {
+            return await Jobs.Include(j => j.Press).FirstOrDefaultAsync(j => j.Id == id);
+        }
+
+        return await Jobs.FindAsync(id);
+    }
+
     public override void Dispose()
     {
         logger.LogInformation("PressScheduleContext {Id} disposing", ContextId);

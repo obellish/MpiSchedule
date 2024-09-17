@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MpiSchedule.Data;
 
@@ -10,9 +11,11 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    partial class PressScheduleContextModelSnapshot : ModelSnapshot
+    [Migration("20240917150524_MakeIndicesUnique")]
+    partial class MakeIndicesUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");

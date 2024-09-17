@@ -8,7 +8,9 @@
 
 <PageTitle>Schedule</PageTitle>
 
-<PressDropdown ValueChanged="OnValueChanged" />
+<h2>Schedule</h2>
+
+<PressDropdown ValueChanged="OnValueChanged" LoadJobs="true" />
 
 <br />
 
@@ -24,6 +26,7 @@
 
 @code
 {
+
     private Modal? modal;
 
     private readonly DateTime today = DateTime.Today;
@@ -32,6 +35,21 @@
 
     private Press? selectedPress;
 
+    [SupplyParameterFromQuery(Name = "pressId")]
+    private int PressId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (PressId is not 0)
+        {
+            await using var db = await DbFactory.CreateDbContextAsync();
+
+            var press = await db.Presses.Include(p => p.Jobs.Where(j => j.Date.Month == today.Month)).FirstOrDefaultAsync(p => p.PressId == PressId);
+
+            await OnValueChanged(press);
+        }
+    }
+
     private async Task OnValueChanged(Press? press)
     {
         jobList.Clear();
@@ -39,7 +57,6 @@
         await using var db = await DbFactory.CreateDbContextAsync();
 
         selectedPress = press;
-
 
         if (selectedPress is not null)
         {
@@ -55,7 +72,7 @@
                 await db.SaveChangesAsync();
             }
 
-            jobList.AddRange(selectedPress.Jobs.OrderBy(x => x.Shift));
+            jobList.AddRange(selectedPress.Jobs.OrderBy(x => x.Shift).Where(j => j.Date.Month == today.Month));
         }
     }
 

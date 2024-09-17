@@ -1,5 +1,7 @@
 ﻿@using MpiSchedule.Data
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+
 <div>
     <p>Name: <code>@Job.Name</code></p>
 
@@ -22,10 +24,20 @@
     <br />
 
     <p>Due date: <code>@Job.DueDate.Date.ToString("MM/dd/yyyy")</code></p>
-    
-    <p>Authenticated: @Authenticated</p>
-    
-    <button class="btn btn-primary" @onclick="CloseCommand">Close</button>
+
+    @if (Authenticated)
+    {
+        <div>
+            <button class="btn btn-secondary" @onclick="EditJob">Edit</button>
+            &nbsp;
+            <button class="btn btn-primary" @onclick="CloseCommand">Close</button>
+        </div>
+    }
+    else
+    {
+        <button class="btn btn-primary" @onclick="CloseCommand">Close</button>
+    }
+
 </div>
 
 @code
@@ -48,5 +60,10 @@
     protected override async Task OnInitializedAsync()
     {
         Authenticated = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated ?? false;
+    }
+
+    private void EditJob()
+    {
+        Navigation.NavigateTo($"/press-schedule/edit/{Job.Id}");
     }
 }

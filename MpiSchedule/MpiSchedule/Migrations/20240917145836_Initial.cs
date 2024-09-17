@@ -31,6 +31,8 @@ namespace MpiSchedule.Migrations
                 name: "Jobs",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     JobNumber = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     PressId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -43,7 +45,7 @@ namespace MpiSchedule.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Jobs", x => x.JobNumber);
+                    table.PrimaryKey("PK_Jobs", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Jobs_Presses_PressId",
                         column: x => x.PressId,

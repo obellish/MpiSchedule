@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace MpiSchedule.Data;
 
+[Index(nameof(PressId), IsUnique = true)]
 public class Press
 {
     public int PressId { get; set; }

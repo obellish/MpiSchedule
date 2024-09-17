@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MpiSchedule.Data;
 
-[PrimaryKey(nameof(JobNumber))]
+[Index(nameof(Id), nameof(JobNumber), IsUnique = true)]
 public class PressJob
 {
+    public int Id { get; set; }
+
     [RegularExpression(@"^\d{7}(?:[-|\W]\d)?$")]
     [StringLength(15)]
     public string JobNumber { get; set; }

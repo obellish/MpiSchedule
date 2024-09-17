@@ -1,0 +1,168 @@
+﻿@page "/press-schedule/edit/{jobId:int}"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using MpiSchedule.Components.Forms
+@using MpiSchedule.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Logging
+@inject ILogger<EditJob> Logger
+@inject IDbContextFactory<PressScheduleContext> DbFactory
+@inject NavigationManager Navigation
+@implements IDisposable
+@implements IAsyncDisposable
+@attribute [Authorize]
+
+@if (Job is null && !busy)
+{
+    <p>Could not find job with id @JobId.</p>
+}
+else
+{
+    <AuthorizeView>
+        <PressJobForm Busy="busy"
+                      Job="Job"
+                      DbJob="DbJob"
+                      IsAdd="false"
+                      CancelRequest="Cancel"
+                      ValidationResult="async (success) => await ValidationResultAsync(success)" />
+    </AuthorizeView>
+}
+
+@if (concurrencyError)
+{
+    <br />
+    <div class="alert alert-danger">
+        <p>
+            The job details have changed since it was last loaded. The updated fields are highlighted in the form.
+            Please choose an option:
+        </p>
+        <p><b>Cancel</b> to lose your changes and keep the database version.</p>
+        <p><b>Submit</b> to force an update with your version.</p>
+    </div>
+}
+
+@if (error)
+{
+    <br />
+    <div class="alert alert-danger">Failed to update the job (@errorMessage).</div>
+}
+
+@code
+{
+    private bool busy;
+    private bool error;
+    private bool concurrencyError;
+    private string errorMessage = string.Empty;
+
+    [Parameter]
+    public int JobId { get; set; }
+
+    private PressScheduleContext? Context { get; set; }
+
+    private PressJob? Job { get; set; }
+
+    private PressJob? DbJob { get; set; }
+
+    public void Dispose() => Context?.Dispose();
+
+    public async ValueTask DisposeAsync()
+    {
+        if (Context is not null)
+        {
+            await Context.DisposeAsync();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        busy = true;
+
+        try
+        {
+            Context = await DbFactory.CreateDbContextAsync();
+
+            if (Context is not null)
+            {
+                var job = await Context.FindJob(JobId, true);
+
+                if (job is not null)
+                {
+                    Job = job;
+                }
+            }
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+
+    private void Cancel()
+    {
+        busy = true;
+        var navigationUrl = "/press-schedule";
+        if (Job is not null)
+        {
+            navigationUrl += $"?pressId={Job.Press.PressId}";
+        }
+        Navigation.NavigateTo(navigationUrl);
+    }
+
+    private async Task ValidationResultAsync(bool success)
+    {
+        if (busy)
+        {
+            return;
+        }
+
+        if (!success)
+        {
+            error = concurrencyError = false;
+            return;
+        }
+
+        busy = true;
+        var navigationUrl = "/press-schedule";
+        if (Job is not null)
+        {
+            navigationUrl += $"?pressId={Job.Press.PressId}";
+        }
+        try
+        {
+            if (Context is not null)
+            {
+                await Context.SaveChangesAsync();
+            }
+
+            Navigation.NavigateTo(navigationUrl, forceLoad: true);
+        }
+        catch (DbUpdateConcurrencyException dbex)
+        {
+            Logger.LogError(dbex, "Failed to update entry");
+            concurrencyError = true;
+
+            var dbValues = await dbex.Entries[0].GetDatabaseValuesAsync();
+
+            if (dbValues is null)
+            {
+                Navigation.NavigateTo(navigationUrl);
+                return;
+            }
+
+            DbJob = (PressJob)dbValues.ToObject();
+
+            dbex.Entries[0].OriginalValues.SetValues(dbValues);
+            error = false;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to update entry");
+            error = true;
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+}

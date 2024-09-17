@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MpiSchedule.Data;
 
@@ -10,9 +11,11 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    partial class PressScheduleContextModelSnapshot : ModelSnapshot
+    [Migration("20240917150308_SplitIndices")]
+    partial class SplitIndices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -33,8 +36,7 @@ namespace MpiSchedule.Migrations
 
                     b.HasKey("PressId");
 
-                    b.HasIndex("PressId")
-                        .IsUnique();
+                    b.HasIndex("PressId");
 
                     b.ToTable("Presses");
 
@@ -116,10 +118,11 @@ namespace MpiSchedule.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PressId");
+                    b.HasIndex("Id");
 
-                    b.HasIndex("Id", "JobNumber")
-                        .IsUnique();
+                    b.HasIndex("JobNumber");
+
+                    b.HasIndex("PressId");
 
                     b.ToTable("Jobs");
                 });

@@ -1,0 +1,45 @@
+﻿@typeparam TModel
+
+@if (Show)
+{
+    @if (isDelta)
+    {
+        <span class="alert alert-warning"><strong>@property</strong></span>
+    }
+    else
+    {
+        <span class="alert alert-success">(same)</span>
+    }
+}
+
+@code
+{
+    private bool isDelta;
+    private IComparable? property;
+
+    [Parameter]
+    public TModel? Model { get; set; }
+
+    [Parameter]
+    public TModel? DbModel { get; set; }
+
+    [Parameter]
+    public Func<TModel, IComparable>? Property { get; set; }
+
+    private bool Show => this is { Model: not null, DbModel: not null };
+
+    protected override void OnInitialized()
+    {
+        if (this is { Property: { } propertyFn, DbModel: { } dbModel })
+        {
+            property = propertyFn(dbModel);
+
+            if (Model is { } model)
+            {
+                isDelta = !propertyFn(model).Equals(property);
+            }
+        }
+
+        base.OnInitialized();
+    }
+}

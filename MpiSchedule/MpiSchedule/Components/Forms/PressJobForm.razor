@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using MpiSchedule.Data
+
+<PageTitle>@Mode Job</PageTitle>
+
+<h2>@Mode Job</h2>
+<br />
+
+@if (Job is not null)
+{
+    <EditForm Model="Job"
+              FormName="JobForm"
+              OnInvalidSubmit="async () => await HandleSubmitAsync(false)"
+              OnValidSubmit="async () => await HandleSubmitAsync(true)">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <p>
+            <label>
+                Job name:
+                <InputText @bind-Value="Job.Name" />
+                <ConcurrencyField Model="Job"
+                                  DbModel="DbJob"
+                                  Property="obj => obj?.Name ?? string.Empty"></ConcurrencyField>
+            </label>
+        </p>
+        <p>
+            <label>
+                Job number:
+                <InputText @bind-Value="Job.JobNumber"/>
+                <ConcurrencyField Model="Job"
+                                  DbModel="DbJob"
+                                  Property="obj => obj?.JobNumber ?? string.Empty"/>
+            </label>
+        </p>
+        <br />
+        <button type="button" disabled="@Busy" class="btn btn-warning" @onclick="CancelAsync">Cancel</button>
+        <button type="submit" disabled="@Busy" class="btn btn-primary">Submit</button>
+    </EditForm>
+}
+
+@code
+{
+    [Parameter]
+    public EventCallback<bool> ValidationResult { get; set; }
+
+    [Parameter]
+    public EventCallback CancelRequest { get; set; }
+
+    [Parameter]
+    public bool IsAdd { get; set; }
+
+    [Parameter]
+    public PressJob? Job { get; set; }
+
+    [Parameter]
+    public PressJob? DbJob { get; set; }
+
+    [Parameter]
+    public bool Busy { get; set; }
+
+    private string Mode => IsAdd ? "Add" : "Edit";
+
+    private Task CancelAsync() => CancelRequest.InvokeAsync(null);
+
+    private Task HandleSubmitAsync(bool isValid) => ValidationResult.InvokeAsync(isValid);
+}

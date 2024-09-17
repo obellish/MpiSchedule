@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240916151939_Initial")]
+    [Migration("20240917145836_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -78,14 +78,19 @@ namespace MpiSchedule.Migrations
 
             modelBuilder.Entity("MpiSchedule.Data.PressJob", b =>
                 {
-                    b.Property<string>("JobNumber")
-                        .HasMaxLength(15)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("JobNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -109,7 +114,7 @@ namespace MpiSchedule.Migrations
                     b.Property<int>("Shift")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("JobNumber");
+                    b.HasKey("Id");
 
                     b.HasIndex("PressId");
 
