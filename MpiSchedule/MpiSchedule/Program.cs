@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MpiSchedule.Client;
 using MpiSchedule.Components;
 using MpiSchedule.Components.Account;
 using MpiSchedule.Data;
@@ -22,6 +24,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddBlazorBootstrap();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
@@ -55,6 +59,16 @@ builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityEmailSender>();
 
+builder.Services.AddHttpClient<PressHttpClient>(client => client.BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ?? "https://localhost:7088"));
+
+builder.Services.AddCors(
+    options => options.AddPolicy(
+        "server",
+        policy => policy.WithOrigins(builder.Configuration["FrontendUrl"] ?? "https://localhost:7088").AllowAnyHeader()
+            .AllowAnyMethod()));
+
+builder.Services.AddEndpointsApiExplorer();
+
 var app = builder.Build();
 
 app.MapHealthChecks("/healthz");
@@ -74,6 +88,8 @@ else
     app.UseHsts();
 }
 
+app.UseCors("server");
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
@@ -86,5 +102,7 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
+app.MapControllers();
 
 app.Run();

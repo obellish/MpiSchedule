@@ -1,4 +1,4 @@
-﻿namespace MpiSchedule.Data;
+﻿namespace MpiSchedule.Client.Models;
 
 public enum Shift
 {

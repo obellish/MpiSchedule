@@ -1,0 +1,27 @@
+﻿@page "/Jobs"
+@using MpiSchedule.Client.Models
+@inject PressHttpClient Http
+
+<h3>Jobs</h3>
+
+@foreach (var press in presses)
+{
+    <p>@press.Name</p>
+
+    <ul>
+
+    @foreach (var job in press.Jobs)
+    {
+        <li>@job.JobNumber</li>
+    }
+    </ul>
+
+    <br />
+}
+
+@code
+{
+    private readonly List<Press> presses = [];
+
+    protected override async Task OnInitializedAsync() => presses.AddRange(await Http.GetAllPressesAsync());
+}

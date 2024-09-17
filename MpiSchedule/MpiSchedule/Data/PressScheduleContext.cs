@@ -1,12 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace MpiSchedule.Data;
 
-public class PressScheduleContext(DbContextOptions<PressScheduleContext> options) : DbContext(options)
+public class PressScheduleContext(DbContextOptions<PressScheduleContext> options, ILogger<PressScheduleContext> logger) : DbContext(options)
 {
     public DbSet<Press> Presses { get; set; }
 
     public DbSet<PressJob> Jobs { get; set; }
+    public override void Dispose()
+    {
+        logger.LogInformation("PressScheduleContext {Id} disposing", ContextId);
+        base.Dispose();
+    }
+
+    public override ValueTask DisposeAsync()
+    {
+        logger.LogInformation("PressScheduleContext {Id} disposing asynchronously", ContextId);
+        return base.DisposeAsync();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

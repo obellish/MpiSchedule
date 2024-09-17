@@ -40,9 +40,9 @@
 
     private string Shift => Job.Shift switch
     {
-        Data.Shift.First => "First",
-        Data.Shift.Second => "Second",
-        Data.Shift.Third => "Third",
+        Client.Models.Shift.First => "First",
+        Client.Models.Shift.Second => "Second",
+        Client.Models.Shift.Third => "Third",
     };
 
     protected override async Task OnInitializedAsync()
