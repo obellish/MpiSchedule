@@ -1,4 +1,4 @@
-﻿@using MpiSchedule.Data
+﻿@using MpiSchedule.Client.Models
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 
@@ -25,7 +25,7 @@
 
     <p>Due date: <code>@Job.DueDate.Date.ToString("MM/dd/yyyy")</code></p>
 
-    @if (Authenticated)
+    @if (authenticated)
     {
         <div>
             <button class="btn btn-secondary" @onclick="EditJob">Edit</button>
@@ -42,28 +42,22 @@
 
 @code
 {
+    private bool authenticated;
+
     [Parameter]
     public PressJob Job { get; set; }
 
     [Parameter]
     public EventCallback CloseCommand { get; set; }
 
-    private bool Authenticated { get; set; }
-
     private string Shift => Job.Shift switch
     {
-        Data.Shift.First => "First",
-        Data.Shift.Second => "Second",
-        Data.Shift.Third => "Third",
+        Models.Shift.First => "First",
+        Models.Shift.Second => "Second",
+        Models.Shift.Third => "Third",
     };
 
-    protected override async Task OnInitializedAsync()
-    {
-        Authenticated = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated ?? false;
-    }
+    protected override async Task OnInitializedAsync() => authenticated = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated is true;
 
-    private void EditJob()
-    {
-        Navigation.NavigateTo($"/press-schedule/edit/{Job.Id}");
-    }
+    private void EditJob() => Navigation.NavigateTo($"/press-schedule/edit/{Job.Id}");
 }

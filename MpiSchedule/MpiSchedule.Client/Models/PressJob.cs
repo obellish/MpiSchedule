@@ -1,12 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using MpiSchedule.Client.Models;
 
-namespace MpiSchedule.Data;
+namespace MpiSchedule.Client.Models;
 
-[Index(nameof(Id), nameof(JobNumber), IsUnique = true)]
 public class PressJob
 {
     public int Id { get; set; }
@@ -16,9 +13,6 @@ public class PressJob
     public string JobNumber { get; set; }
 
     public string Name { get; set; }
-
-    [JsonIgnore]
-    public Press Press { get; set; }
 
     public int PressId { get; set; }
 

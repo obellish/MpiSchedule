@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MpiSchedule.Client.Http;
 using MpiSchedule.Components;
 using MpiSchedule.Components.Account;
 using MpiSchedule.Data;
@@ -23,7 +24,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddBlazorBootstrap();
-builder.Services.AddControllers()
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
     .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddCascadingAuthenticationState();
@@ -65,6 +66,9 @@ builder.Services.AddCors(
             .AllowAnyMethod()));
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddHttpClient<PressHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
+builder.Services.AddHttpClient<PressJobHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
 
 var app = builder.Build();
 

@@ -6,8 +6,6 @@
 
 <p>This is where I test stuff</p>
 
-<PressDropdown @bind-Value="selectedPress" />
-
 <br />
 
 <MonthlyCalendar Values="models" GetStartDate="m => m.Day" GetValueContent="m => m.ToString()" HighlightToday="true" />
@@ -23,8 +21,6 @@
 @code
 {
     private readonly List<FakeModel> models = [];
-
-    private Press? selectedPress;
 
     private int currentCount;
 

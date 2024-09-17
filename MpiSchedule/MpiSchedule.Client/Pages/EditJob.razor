@@ -1,0 +1,116 @@
+﻿@page "/press-schedule/edit/{jobId:int}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Logging
+@using MpiSchedule.Client.Http
+@using MpiSchedule.Client.Models
+@inject ILogger<EditJob> Logger
+@inject PressJobHttpClient Http
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+@if (Job is null && !busy)
+{
+    <p>Could not find job with id @JobId.</p>
+}
+else
+{
+    <AuthorizeView>
+        <PressJobForm Busy="busy"
+                      Job="Job"
+                      IsAdd="false"
+                      CancelRequest="Cancel"
+                      ValidationResult="async (success) => await ValidationResultAsync(success)"/>
+    </AuthorizeView>
+}
+
+@if (error)
+{
+    <br />
+    <div class="alert alert-danger">Failed to update the job (@errorMessage).</div>
+}
+
+@code
+{
+    private bool busy;
+    private bool error;
+    private string errorMessage = string.Empty;
+
+    [Parameter]
+    public int JobId { get; set; }
+
+    private PressJob? Job { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        busy = true;
+
+        try
+        {
+            Job = await Http.GetJobAsync(JobId);
+
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to fetch entry");
+            errorMessage = ex.Message;
+            error = true;
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+
+    private void Cancel()
+    {
+        busy = true;
+        var navigationUrl = "/press-schedule";
+        if (Job is not null)
+        {
+            navigationUrl += $"?pressId={Job.PressId}";
+        }
+
+        Navigation.NavigateTo(navigationUrl);
+    }
+
+    private async Task ValidationResultAsync(bool success)
+    {
+        if (busy)
+        {
+            return;
+        }
+
+        if (!success)
+        {
+            error = false;
+            return;
+        }
+
+        busy = true;
+        var navigationUrl = "/press-schedule";
+        if (Job is not null)
+        {
+            navigationUrl += $"?pressId={Job.PressId}";
+        }
+
+        try
+        {
+            if (Job is not null)
+            {
+                await Http.EditJobAsync(Job);
+            }
+
+            Navigation.NavigateTo(navigationUrl);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to update entry");
+            error = true;
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+}

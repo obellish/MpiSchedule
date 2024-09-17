@@ -1,0 +1,83 @@
+﻿@page "/press-schedule"
+@using MpiSchedule.Client.Models
+@using MpiSchedule.Client.Http
+@inject PressHttpClient Http
+
+<PageTitle>Schedule</PageTitle>
+
+<h2>Schedule</h2>
+
+<PressDropdown ValueChanged="OnValueChanged" />
+
+<br />
+
+<MonthlyCalendar TModel="PressJob"
+                 Values="jobList"
+                 ValueClick="ValueClick"
+                 GetStartDate="job => job.Date"
+                 GetValueContent="job => job.Name"
+                 GetBackgroundColor="BackgroundColorForJob"
+                 GetForegroundColor="ForegroundColorForJob" />
+
+<Modal @ref="modal" />
+
+@code
+{
+    private readonly DateTime today = DateTime.Today;
+    private readonly List<PressJob> jobList = [];
+
+    private Modal? modal;
+    private Press? selectedPress;
+
+    [SupplyParameterFromQuery(Name = "pressId")]
+    private int PressId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (PressId is not 0)
+        {
+            var press = await Http.GetPressAsync(PressId);
+
+            OnValueChanged(press);
+        }
+    }
+
+    private static string BackgroundColorForJob(PressJob job) => job.Shift switch
+    {
+        Shift.First => "#2dc937",
+        Shift.Second => "#e7b416",
+        Shift.Third => "#cc3232",
+        _ => "#000000",
+    };
+
+    private static string ForegroundColorForJob(PressJob job) => job.Shift switch
+    {
+        Shift.First or Shift.Second => "#000000",
+        _ => "#ffffff",
+    };
+
+    private void OnValueChanged(Press? press)
+    {
+        jobList.Clear();
+
+        selectedPress = press;
+
+        if (selectedPress is not null)
+        {
+            jobList.AddRange(selectedPress.Jobs.OrderBy(x => x.Shift).Where(j => j.Date.Month == today.Month));
+        }
+    }
+
+    private async Task ValueClick(PressJob job)
+    {
+        var parameters = new Dictionary<string, object>
+        {
+            { nameof(PressJobInfoModal.Job), job },
+            { nameof(PressJobInfoModal.CloseCommand), EventCallback.Factory.Create(this, CloseModal) },
+        };
+
+        await modal?.ShowAsync<PressJobInfoModal>(title: "Job Info", parameters: parameters)!;
+    }
+
+    private async Task CloseModal() => await modal?.HideAsync()!;
+}

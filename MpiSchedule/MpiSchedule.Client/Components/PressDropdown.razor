@@ -1,0 +1,37 @@
+﻿@using MpiSchedule.Client.Models
+@using MpiSchedule.Client.Http
+@inject PressHttpClient Http
+
+<select class="press-dropdown" @onchange="OnValueChanged">
+    <option value="-1">Select...</option>
+    @if (presses is not null)
+    {
+        @foreach (var press in presses)
+        {
+            <option value="@press.PressId">@press.Name</option>
+        }
+    }
+</select>
+
+@code
+{
+    private List<Press>? presses;
+
+    [Parameter]
+    public Press? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Press> ValueChanged { get; set; }
+
+    protected override async Task OnInitializedAsync() => presses = [.. await Http.GetAllPressesAsync()];
+
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var pressId) && pressId > 0)
+        {
+            Value = await Http.GetPressAsync(pressId);
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+}

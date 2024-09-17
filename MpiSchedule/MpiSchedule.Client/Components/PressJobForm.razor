@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-@using MpiSchedule.Data
+@using MpiSchedule.Client.Models
 
 <PageTitle>@Mode Job</PageTitle>
 
@@ -9,7 +9,7 @@
 @if (Job is not null)
 {
     <EditForm Model="Job"
-              FormName="JobForm"
+              FormName="JobEditor"
               OnInvalidSubmit="async () => await HandleSubmitAsync(false)"
               OnValidSubmit="async () => await HandleSubmitAsync(true)">
         <DataAnnotationsValidator />
@@ -18,18 +18,6 @@
             <label>
                 Job name:
                 <InputText @bind-Value="Job.Name" />
-                <ConcurrencyField Model="Job"
-                                  DbModel="DbJob"
-                                  Property="obj => obj?.Name ?? string.Empty"></ConcurrencyField>
-            </label>
-        </p>
-        <p>
-            <label>
-                Job number:
-                <InputText @bind-Value="Job.JobNumber"/>
-                <ConcurrencyField Model="Job"
-                                  DbModel="DbJob"
-                                  Property="obj => obj?.JobNumber ?? string.Empty"/>
             </label>
         </p>
         <br />
@@ -53,14 +41,11 @@
     public PressJob? Job { get; set; }
 
     [Parameter]
-    public PressJob? DbJob { get; set; }
-
-    [Parameter]
     public bool Busy { get; set; }
 
     private string Mode => IsAdd ? "Add" : "Edit";
 
-    private Task CancelAsync() => CancelRequest.InvokeAsync(null);
+    private Task CancelAsync() => CancelRequest.InvokeAsync();
 
     private Task HandleSubmitAsync(bool isValid) => ValidationResult.InvokeAsync(isValid);
 }
