@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MpiSchedule.Client;
 using MpiSchedule.Components;
 using MpiSchedule.Components.Account;
 using MpiSchedule.Data;
@@ -58,8 +57,6 @@ builder.Services.AddTransient<IEmailSender, GmailEmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityEmailSender>();
-
-builder.Services.AddHttpClient<PressHttpClient>(client => client.BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ?? "https://localhost:7088"));
 
 builder.Services.AddCors(
     options => options.AddPolicy(

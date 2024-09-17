@@ -1,12 +1,12 @@
 ﻿@page "/press-schedule"
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using Microsoft.EntityFrameworkCore
-@using MpiSchedule.Client.Components.Scheduling
-@using MpiSchedule.Client.Models
 @using MpiSchedule.Data
 @using Press = MpiSchedule.Data.Press
 @using PressJob = MpiSchedule.Data.PressJob
 @inject IDbContextFactory<PressScheduleContext> DbFactory
+
+<PageTitle>Schedule</PageTitle>
 
 <PressDropdown ValueChanged="OnValueChanged" />
 

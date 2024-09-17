@@ -12,6 +12,4 @@ builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticat
 
 builder.Services.AddBlazorBootstrap();
 
-builder.Services.AddHttpClient<PressHttpClient>(client => client.BaseAddress = new Uri(builder.Configuration["FrontendUrl"] ?? "https://localhost:7088"));
-
 await builder.Build().RunAsync();
