@@ -1,14 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using MpiSchedule.Data;
 
 namespace MpiSchedule.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PressController(PressScheduleContext context, ILogger<PressController> logger) : Controller
+public class PressController(PressScheduleContext context) : Controller
 {
     [HttpGet]
     public async Task<JsonResult> Index() => Json(await context.Presses.Include(p => p.Jobs).ToListAsync());
