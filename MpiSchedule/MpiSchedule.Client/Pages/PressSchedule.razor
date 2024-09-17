@@ -1,7 +1,10 @@
 ﻿@page "/press-schedule"
 @using MpiSchedule.Client.Models
 @using MpiSchedule.Client.Http
+@using Microsoft.AspNetCore.SignalR.Client
 @inject PressHttpClient Http
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
 
 <PageTitle>Schedule</PageTitle>
 
@@ -25,12 +28,52 @@
 {
     private readonly DateTime today = DateTime.Today;
     private readonly List<PressJob> jobList = [];
-
+    private HubConnection? hubConnection;
     private Modal? modal;
     private Press? selectedPress;
 
     [SupplyParameterFromQuery(Name = "pressId")]
     private int PressId { get; set; }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/refresh-schedule"))
+            .Build();
+
+        hubConnection.On(
+            "RefreshSchedule",
+            async () =>
+            {
+                if (selectedPress is not null)
+                {
+                    var press = await Http.GetPressAsync(selectedPress.PressId);
+
+                    OnValueChanged(press);
+
+                    StateHasChanged();
+                }
+
+                if (PressId is not 0)
+                {
+                    var press = await Http.GetPressAsync(PressId);
+
+                    OnValueChanged(press);
+
+                    StateHasChanged();
+                }
+            });
+
+        await hubConnection.StartAsync();
+    }
 
     protected override async Task OnParametersSetAsync()
     {

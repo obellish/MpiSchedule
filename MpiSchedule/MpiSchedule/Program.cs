@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +15,7 @@ using MpiSchedule.Client.Http;
 using MpiSchedule.Components;
 using MpiSchedule.Components.Account;
 using MpiSchedule.Data;
+using MpiSchedule.Hubs;
 using MpiSchedule.Services;
 using MpiSchedule.Utils;
 
@@ -70,6 +73,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient<PressHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
 builder.Services.AddHttpClient<PressJobHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
 
+builder.Services.AddSignalR();
+
+builder.Services.AddResponseCompression(
+    options =>
+    {
+        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(["application/octet-stream"]);
+    });
+
 var app = builder.Build();
 
 app.MapHealthChecks("/healthz");
@@ -105,5 +116,7 @@ app.MapRazorComponents<App>()
 app.MapAdditionalIdentityEndpoints();
 
 app.MapControllers();
+
+app.MapHub<RefreshScheduleHub>("/refresh-schedule");
 
 app.Run();
