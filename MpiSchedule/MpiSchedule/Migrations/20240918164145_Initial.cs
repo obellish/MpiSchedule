@@ -20,7 +20,7 @@ namespace MpiSchedule.Migrations
                     PressId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    Version = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,7 +41,7 @@ namespace MpiSchedule.Migrations
                     DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     QuantityRan = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    Version = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {

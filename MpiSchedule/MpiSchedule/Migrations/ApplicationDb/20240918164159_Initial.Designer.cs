@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240918121153_Initial")]
+    [Migration("20240918164159_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -48,15 +48,15 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.HasData(
                         new
                         {
-                            Id = "642a5fbd-92a8-4fd2-be2d-68c530f71183",
-                            ConcurrencyStamp = "663827e4-cb5a-456e-8268-51673cc098d5",
+                            Id = "106a7e43-d23c-43e4-baed-3e6a25e07a22",
+                            ConcurrencyStamp = "84b8223a-aabd-4815-80b9-d630c2313881",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "8ba0dcd1-7b1c-4f17-ba02-7441cf7b7c75",
-                            ConcurrencyStamp = "663123b8-d1f8-4e8d-bf7c-aabc90e89712",
+                            Id = "568380f6-a39f-4d3a-92dc-0236ef03f1a1",
+                            ConcurrencyStamp = "f156f761-9694-46cb-90f7-050fe808d358",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -206,11 +206,6 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
@@ -220,6 +215,12 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
 
                     b.HasKey("Id");
 

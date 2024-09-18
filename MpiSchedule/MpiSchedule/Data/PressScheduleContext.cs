@@ -52,13 +52,5 @@ public class PressScheduleContext(DbContextOptions<PressScheduleContext> options
         modelBuilder.Entity<Press>().HasData(new Press { Name = "14\"Tamarack", PressId = ++pressId });
         modelBuilder.Entity<Press>().HasData(new Press { Name = "16\"Tamarack", PressId = ++pressId });
         modelBuilder.Entity<Press>().HasData(new Press { Name = "Test press", PressId = ++pressId });
-
-        modelBuilder.Entity<Press>()
-            .Property<byte[]>(ApplicationDbContext.RowVersion)
-            .IsRowVersion();
-
-        modelBuilder.Entity<PressJob>()
-            .Property<byte[]>(ApplicationDbContext.RowVersion)
-            .IsRowVersion();
     }
 }

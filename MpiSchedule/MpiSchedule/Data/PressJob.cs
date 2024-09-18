@@ -33,4 +33,7 @@ public class PressJob
     public int Quantity { get; set; }
 
     public int QuantityRan { get; set; }
+
+    [Timestamp]
+    public byte[] Version { get; set; }
 }

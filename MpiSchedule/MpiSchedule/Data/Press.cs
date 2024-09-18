@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace MpiSchedule.Data;
@@ -11,4 +12,7 @@ public class Press
     public string? Name { get; set; }
 
     public List<PressJob> Jobs { get; set; } = [];
+
+    [Timestamp]
+    public byte[] Version { get; set; }
 }

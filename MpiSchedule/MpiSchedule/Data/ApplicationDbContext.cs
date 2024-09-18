@@ -9,8 +9,6 @@ namespace MpiSchedule.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ILogger<ApplicationDbContext> logger) : IdentityDbContext<ApplicationUser>(options)
 {
-    public static readonly string RowVersion = nameof(RowVersion);
-
     public override void Dispose()
     {
         logger.LogInformation("ApplicationDbContext {Id} disposing", ContextId);
@@ -37,10 +35,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                     Name = "Admin", NormalizedName = "ADMIN", Id = Guid.NewGuid().ToString(),
                     ConcurrencyStamp = Guid.NewGuid().ToString(),
                 });
-
-        builder.Entity<ApplicationUser>()
-            .Property<byte[]>(RowVersion)
-            .IsRowVersion();
 
         base.OnModelCreating(builder);
     }
