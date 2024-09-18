@@ -55,7 +55,7 @@
             {
                 if (selectedPress is not null)
                 {
-                    var press = await Http.GetPressAsync(selectedPress.PressId);
+                    var press = await Http.GetPressAsync(selectedPress.PressId, true);
 
                     OnValueChanged(press);
 
@@ -64,7 +64,7 @@
 
                 if (PressId is not 0)
                 {
-                    var press = await Http.GetPressAsync(PressId);
+                    var press = await Http.GetPressAsync(PressId, true);
 
                     OnValueChanged(press);
 
@@ -79,7 +79,7 @@
     {
         if (PressId is not 0)
         {
-            var press = await Http.GetPressAsync(PressId);
+            var press = await Http.GetPressAsync(PressId, true);
 
             OnValueChanged(press);
         }

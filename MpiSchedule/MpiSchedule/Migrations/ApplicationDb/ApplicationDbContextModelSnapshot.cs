@@ -41,6 +41,22 @@ namespace MpiSchedule.Migrations.ApplicationDb
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c6bcef64-3420-46a3-b0ae-8892f09994e1",
+                            ConcurrencyStamp = "7f0d340f-197c-4159-b51d-4241ed07fe43",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "d41ae838-805e-4b89-9078-e660c57a6747",
+                            ConcurrencyStamp = "d9ee58dc-672b-4844-b691-bec0b4751f8e",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -169,9 +185,6 @@ namespace MpiSchedule.Migrations.ApplicationDb
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Manager")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)

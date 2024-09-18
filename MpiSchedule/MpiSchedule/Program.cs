@@ -49,6 +49,7 @@ builder.Services.AddDbContextFactory<PressScheduleContext>(options => options.Us
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
@@ -70,8 +71,8 @@ builder.Services.AddCors(
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddHttpClient<PressHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
-builder.Services.AddHttpClient<PressJobHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
+builder.Services.AddHttpClient<PressHttpClient>(BaseClient.ConfigureClient(builder.Configuration));
+builder.Services.AddHttpClient<PressJobHttpClient>(BaseClient.ConfigureClient(builder.Configuration));
 
 builder.Services.AddSignalR();
 

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace MpiSchedule.Migrations.ApplicationDb
 {
     /// <inheritdoc />
@@ -30,7 +32,6 @@ namespace MpiSchedule.Migrations.ApplicationDb
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Manager = table.Column<bool>(type: "INTEGER", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -156,6 +157,15 @@ namespace MpiSchedule.Migrations.ApplicationDb
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "c6bcef64-3420-46a3-b0ae-8892f09994e1", "7f0d340f-197c-4159-b51d-4241ed07fe43", "User", "USER" },
+                    { "d41ae838-805e-4b89-9078-e660c57a6747", "d9ee58dc-672b-4844-b691-bec0b4751f8e", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

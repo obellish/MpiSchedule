@@ -10,12 +10,14 @@ namespace MpiSchedule.Controllers;
 public class PressController(PressScheduleContext context) : Controller
 {
     [HttpGet]
-    public async Task<JsonResult> Index() => Json(await context.Presses.Include(p => p.Jobs).ToListAsync());
+    public async Task<JsonResult> Index(bool includeJobs = false) => includeJobs
+        ? Json(await context.Presses.Include(p => p.Jobs).ToListAsync())
+        : Json(await context.Presses.ToListAsync());
 
     [HttpGet("{pressId}")]
-    public async Task<IActionResult> GetPress(int pressId)
+    public async Task<IActionResult> GetPress(int pressId, bool loadJobs = false)
     {
-        var press = await context.FindPress(pressId, true);
+        var press = await context.FindPress(pressId, loadJobs);
 
         if (press is not null)
         {

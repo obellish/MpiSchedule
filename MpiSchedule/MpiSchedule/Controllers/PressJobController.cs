@@ -10,7 +10,7 @@ namespace MpiSchedule.Controllers;
 public class PressJobController(PressScheduleContext context) : Controller
 {
     [HttpGet]
-    public async Task<JsonResult> Index() => Json(await context.Jobs.Include(p => p.Press).ToListAsync());
+    public async Task<JsonResult> Index() => Json(await context.Jobs.ToListAsync());
 
     [HttpGet("{jobId}")]
     public async Task<IActionResult> GetJob(int jobId)

@@ -29,7 +29,7 @@
     {
         if (int.TryParse(e.Value?.ToString(), out var pressId) && pressId > 0)
         {
-            Value = await Http.GetPressAsync(pressId);
+            Value = await Http.GetPressAsync(pressId, true);
 
             await ValueChanged.InvokeAsync(Value);
         }

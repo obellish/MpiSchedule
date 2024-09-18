@@ -12,7 +12,7 @@ builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticat
 
 builder.Services.AddBlazorBootstrap();
 
-builder.Services.AddHttpClient<PressHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
-builder.Services.AddHttpClient<PressJobHttpClient>(PressHttpClient.ConfigureClient(builder.Configuration));
+builder.Services.AddHttpClient<PressHttpClient>(BaseClient.ConfigureClient(builder.Configuration));
+builder.Services.AddHttpClient<PressJobHttpClient>(BaseClient.ConfigureClient(builder.Configuration));
 
 await builder.Build().RunAsync();

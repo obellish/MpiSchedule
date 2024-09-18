@@ -74,10 +74,7 @@ namespace MpiSchedule.Components.Account
             }
         }
 
-        private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
-        {
-            authenticationStateTask = task;
-        }
+        private void OnAuthenticationStateChanged(Task<AuthenticationState> task) => authenticationStateTask = task;
 
         private async Task OnPersistingAsync()
         {
@@ -93,13 +90,17 @@ namespace MpiSchedule.Components.Account
             {
                 var userId = principal.FindFirst(options.ClaimsIdentity.UserIdClaimType)?.Value;
                 var email = principal.FindFirst(options.ClaimsIdentity.EmailClaimType)?.Value;
+                var role = principal.FindFirst(options.ClaimsIdentity.RoleClaimType)?.Value;
 
-                if (userId != null && email != null)
+                if (userId is not null && email is not null)
                 {
-                    state.PersistAsJson(nameof(UserInfo), new UserInfo
+                    state.PersistAsJson(
+                        nameof(UserInfo), 
+                        new UserInfo
                     {
                         UserId = userId,
                         Email = email,
+                        Role = role,
                     });
                 }
             }
