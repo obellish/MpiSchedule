@@ -10,7 +10,7 @@ namespace MpiSchedule.Client.Http;
 public class PressHttpClient(HttpClient client)
 {
     public static Action<HttpClient> ConfigureClient(IConfiguration config) => client =>
-        client.BaseAddress = new Uri(config["BackendUrl"] ?? "https://localhost:7088");
+        client.BaseAddress = new Uri(config["BackendUrl"] ?? "http://localhost:5286");
 
     public async Task<Press[]> GetAllPressesAsync() => await client.GetFromJsonAsync<Press[]>("api/Press") ?? [];
 

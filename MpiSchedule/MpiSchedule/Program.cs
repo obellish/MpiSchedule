@@ -65,7 +65,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityEmailSender
 builder.Services.AddCors(
     options => options.AddPolicy(
         "server",
-        policy => policy.WithOrigins(builder.Configuration["FrontendUrl"] ?? "https://localhost:7088").AllowAnyHeader()
+        policy => policy.WithOrigins(builder.Configuration["FrontendUrl"] ?? "http://localhost:5286").AllowAnyHeader()
             .AllowAnyMethod()));
 
 builder.Services.AddEndpointsApiExplorer();
@@ -101,8 +101,6 @@ else
 }
 
 app.UseCors("server");
-
-app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
