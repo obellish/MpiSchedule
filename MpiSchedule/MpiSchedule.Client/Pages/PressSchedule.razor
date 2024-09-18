@@ -11,14 +11,19 @@
 
 <h2>Schedule</h2>
 
-<PressDropdown Value="selectedPress" ValueChanged="OnValueChanged" />
+<div>
+    <PressDropdown Value="selectedPress" ValueChanged="OnValueChanged" />
+
+    <AuthorizeView Roles="Manager, Developer">
+        <button class="btn btn-secondary" @onclick="AddJob">Add job</button>
+    </AuthorizeView>
+</div>
 
 <br />
 
 <MonthlyCalendar TModel="PressJob"
                  Values="jobList"
                  ValueClick="ValueClick"
-                 DayClick="DayClick"
                  GetStartDate="job => job.Date"
                  GetValueContent="job => job.Name"
                  GetBackgroundColor="BackgroundColorForJob"
@@ -127,18 +132,18 @@
         }
     }
 
-    private async Task DayClick(DateTime date)
+    private async Task AddJob()
     {
         if (selectedPress is null)
         {
             return;
         }
 
-        var confirmation = await dialog?.ShowAsync(title: "Add a job", message1: $"Would you like to add a job on {date:MM/dd/yyyy}")!;
+        var confirmation = await dialog?.ShowAsync(title: "Add a job", message1: $"Would you like to add a job")!;
 
         if (confirmation)
         {
-            Navigation.NavigateTo($"/press-schedule/add?pressId={selectedPress.PressId}&date={date}");
+            Navigation.NavigateTo($"/press-schedule/add?pressId={selectedPress.PressId}&date={DateTime.Today}");
         }
     }
 

@@ -30,7 +30,7 @@
 
     <p>Quantity already ran: <code>@Job.QuantityRan</code></p>
 
-    <AuthorizeView>
+    <AuthorizeView Roles="Manager, Developer">
         <Authorized>
             <button class="btn btn-secondary" @onclick="EditJob">Edit</button>
             &nbsp;

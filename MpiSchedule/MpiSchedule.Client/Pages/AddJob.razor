@@ -8,7 +8,7 @@
 @inject PressJobHttpClient Http
 @inject NavigationManager Navigation
 @implements IAsyncDisposable
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin, Developer")]
 
 @if (Job is not null)
 {
