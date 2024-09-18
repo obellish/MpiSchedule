@@ -72,8 +72,7 @@
 
                 <div class="fade-in monthly-day noselect @cssToday"
                      style="@cssBackground"
-                     ondragover="event.preventDefault();"
-                     @onclick="_ => ClickDayInternal(dayClick)">
+                     ondragover="event.preventDefault();">
                     @(dayCounter.Day.ToString())
                 </div>
                 dayCounter = dayClick.AddDays(1);

@@ -43,9 +43,6 @@
     [Parameter]
     public EventCallback<TModel> ValueClick { get; set; }
 
-    [Parameter]
-    public EventCallback<DateTime> DayClick { get; set; }
-
     protected static int GetNumberOfDay(int numOfDay)
     {
         switch (numOfDay)
@@ -87,6 +84,4 @@
     }
 
     protected async Task ClickValueInternal(TModel task) => await ValueClick.InvokeAsync(task);
-
-    protected async Task ClickDayInternal(DateTime dateTime) => await DayClick.InvokeAsync(dateTime);
 }
