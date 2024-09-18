@@ -59,22 +59,13 @@
             .WithUrl(Navigation.ToAbsoluteUri("/refresh-schedule"))
             .Build();
 
-        hubConnection.On(
+        hubConnection.On<int>(
             "RefreshSchedule",
-            async () =>
+            async pressId =>
             {
-                if (selectedPress is not null)
+                if (selectedPress?.PressId == pressId || PressId == pressId)
                 {
-                    var press = await Http.GetPressAsync(selectedPress.PressId, true);
-
-                    await OnValueChanged(press);
-
-                    StateHasChanged();
-                }
-
-                if (PressId is not 0)
-                {
-                    var press = await Http.GetPressAsync(PressId, true);
+                    var press = await Http.GetPressAsync(pressId, true);
 
                     await OnValueChanged(press);
 

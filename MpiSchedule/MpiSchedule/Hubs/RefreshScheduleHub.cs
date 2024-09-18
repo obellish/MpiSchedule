@@ -5,5 +5,5 @@ namespace MpiSchedule.Hubs;
 
 public class RefreshScheduleHub : Hub
 {
-    public async Task RefreshSchedule() => await Clients.Others.SendAsync(nameof(RefreshSchedule));
+    public async Task RefreshSchedule(int pressId) => await Clients.Others.SendAsync(nameof(RefreshSchedule), pressId);
 }

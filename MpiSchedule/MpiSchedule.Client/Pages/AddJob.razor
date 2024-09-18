@@ -105,7 +105,7 @@
                 await Http.CreateJobAsync(Job);
             }
 
-            await hubConnection?.SendAsync("RefreshSchedule")!;
+            await hubConnection?.SendAsync("RefreshSchedule", PressId)!;
 
             Navigation.NavigateTo(navigationUrl);
         }

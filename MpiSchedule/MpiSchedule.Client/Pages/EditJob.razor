@@ -139,7 +139,7 @@ else
                 await Http.EditJobAsync(Job);
             }
 
-            await hubConnection?.SendAsync("RefreshSchedule")!;
+            await hubConnection?.SendAsync("RefreshSchedule", Job?.PressId ?? 0)!;
 
             Navigation.NavigateTo(navigationUrl);
         }

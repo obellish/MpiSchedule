@@ -50,6 +50,17 @@
         </p>
         <p>
             <label>
+                Shift:
+                <InputSelect @bind-Value="Job.Shift">
+                    @foreach (var shift in Enum.GetValues<Shift>())
+                    {
+                        <option id="@shift">@shift</option>
+                    }
+                </InputSelect>
+            </label>
+        </p>
+        <p>
+            <label>
                 Due date:
                 <InputDate @bind-Value="Job.DueDate" />
             </label>
