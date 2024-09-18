@@ -34,13 +34,18 @@ namespace MpiSchedule.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     JobNumber = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     PressId = table.Column<int>(type: "INTEGER", nullable: false),
                     Shift = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     QuantityRan = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReceivedOrder = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    WipItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: true),
+                    FinishedItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: true),
+                    Notes = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
                     RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
                 },
                 constraints: table =>

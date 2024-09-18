@@ -12,8 +12,6 @@ public class PressScheduleContext(DbContextOptions<PressScheduleContext> options
 
     public DbSet<PressJob> Jobs { get; set; } = default!;
 
-    public DbSet<DetailedPressJob> DetailedJobs { get; set; } = default!;
-
     public async Task<Press?> FindPress(int id, bool loadJobs = false)
     {
         if (loadJobs)
@@ -59,7 +57,6 @@ public class PressScheduleContext(DbContextOptions<PressScheduleContext> options
 
         modelBuilder.Entity<Press>().Property<byte[]>(RowVersion).IsRowVersion();
         modelBuilder.Entity<PressJob>().Property<byte[]>(RowVersion).IsRowVersion();
-        modelBuilder.Entity<DetailedPressJob>().Property<byte[]>(RowVersion).IsRowVersion();
 
         base.OnModelCreating(modelBuilder);
     }

@@ -11,35 +11,14 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240918182331_AddDetailedJob")]
-    partial class AddDetailedJob
+    [Migration("20240918185048_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
-
-            modelBuilder.Entity("MpiSchedule.Data.DetailedPressJob", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PressJobId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PressJobId");
-
-                    b.ToTable("DetailedJobs");
-                });
 
             modelBuilder.Entity("MpiSchedule.Data.Press", b =>
                 {
@@ -112,6 +91,10 @@ namespace MpiSchedule.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("FinishedItemNumber")
+                        .HasMaxLength(7)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("JobNumber")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -119,6 +102,11 @@ namespace MpiSchedule.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PressId")
@@ -130,6 +118,9 @@ namespace MpiSchedule.Migrations
                     b.Property<int>("QuantityRan")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("ReceivedOrder")
+                        .HasColumnType("TEXT");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -137,6 +128,13 @@ namespace MpiSchedule.Migrations
 
                     b.Property<int>("Shift")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("WipItemNumber")
+                        .HasMaxLength(7)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -146,17 +144,6 @@ namespace MpiSchedule.Migrations
                         .IsUnique();
 
                     b.ToTable("Jobs");
-                });
-
-            modelBuilder.Entity("MpiSchedule.Data.DetailedPressJob", b =>
-                {
-                    b.HasOne("MpiSchedule.Data.PressJob", "Job")
-                        .WithMany()
-                        .HasForeignKey("PressJobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Job");
                 });
 
             modelBuilder.Entity("MpiSchedule.Data.PressJob", b =>

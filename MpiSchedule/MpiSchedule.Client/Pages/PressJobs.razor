@@ -1,0 +1,23 @@
+﻿@page "/press-schedule/jobs"
+@using MpiSchedule.Client.Models
+@using MpiSchedule.Client.Http
+@inject PressJobHttpClient Http
+
+<PageTitle>Press Jobs</PageTitle>
+
+<Grid @ref="grid" TItem="PressJob"
+      Data="pressJobs">
+    <GridColumns>
+        <GridColumn TItem="PressJob" HeaderText="Press" PropertyName="Press">
+            @context.PressId
+        </GridColumn>
+    </GridColumns>
+</Grid>
+
+@code
+{
+    private readonly List<PressJob> pressJobs = [];
+    private Grid<PressJob>? grid;
+
+    protected override async Task OnInitializedAsync() => pressJobs.AddRange(await Http.GetAllJobsAsync());
+}
