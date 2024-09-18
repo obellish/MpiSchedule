@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MpiSchedule.Data;
@@ -26,10 +27,29 @@ public class PressJobController(PressScheduleContext context) : Controller
     }
 
     [HttpPatch]
-    public async Task<OkObjectResult> PatchJob(PressJob job)
+    public async Task<NoContentResult> EditJob(PressJob job)
     {
         context.Jobs.Attach(job).State = EntityState.Modified;
 
-        return Ok(await context.SaveChangesAsync());
+        await context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateJob(PressJob job)
+    {
+        context.Jobs.Add(job);
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return new UnsupportedMediaTypeResult();
+        }
+
+        return Created();
     }
 }
