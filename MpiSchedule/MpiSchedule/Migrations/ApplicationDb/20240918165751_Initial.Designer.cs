@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240918164159_Initial")]
+    [Migration("20240918165751_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -48,17 +48,21 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.HasData(
                         new
                         {
-                            Id = "106a7e43-d23c-43e4-baed-3e6a25e07a22",
-                            ConcurrencyStamp = "84b8223a-aabd-4815-80b9-d630c2313881",
+                            Id = "1a6c9ea7-f8b3-4ea6-bb57-93ec2f58e26b",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "568380f6-a39f-4d3a-92dc-0236ef03f1a1",
-                            ConcurrencyStamp = "f156f761-9694-46cb-90f7-050fe808d358",
+                            Id = "ce141ae9-2adf-4e12-a12c-6c1432077a59",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "ab290758-8677-42bc-8b11-cb4c865ba94f",
+                            Name = "Developer",
+                            NormalizedName = "DEV"
                         });
                 });
 
@@ -206,6 +210,11 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
@@ -215,12 +224,6 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
 
                     b.HasKey("Id");
 

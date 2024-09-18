@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240918164145_Initial")]
+    [Migration("20240918165741_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -29,9 +29,8 @@ namespace MpiSchedule.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<byte[]>("Version")
+                    b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("BLOB");
 
@@ -110,14 +109,13 @@ namespace MpiSchedule.Migrations
                     b.Property<int>("QuantityRan")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Shift")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("Version")
+                    b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("BLOB");
+
+                    b.Property<int>("Shift")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

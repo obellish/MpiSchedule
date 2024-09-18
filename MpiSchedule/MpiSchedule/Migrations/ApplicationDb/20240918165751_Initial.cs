@@ -32,7 +32,7 @@ namespace MpiSchedule.Migrations.ApplicationDb
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Version = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -164,8 +164,9 @@ namespace MpiSchedule.Migrations.ApplicationDb
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "106a7e43-d23c-43e4-baed-3e6a25e07a22", "84b8223a-aabd-4815-80b9-d630c2313881", "User", "USER" },
-                    { "568380f6-a39f-4d3a-92dc-0236ef03f1a1", "f156f761-9694-46cb-90f7-050fe808d358", "Admin", "ADMIN" }
+                    { "1a6c9ea7-f8b3-4ea6-bb57-93ec2f58e26b", null, "User", "USER" },
+                    { "ab290758-8677-42bc-8b11-cb4c865ba94f", null, "Developer", "DEV" },
+                    { "ce141ae9-2adf-4e12-a12c-6c1432077a59", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

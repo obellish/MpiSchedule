@@ -12,7 +12,4 @@ public class Press
     public string? Name { get; set; }
 
     public List<PressJob> Jobs { get; set; } = [];
-
-    [Timestamp]
-    public byte[] Version { get; set; }
 }
