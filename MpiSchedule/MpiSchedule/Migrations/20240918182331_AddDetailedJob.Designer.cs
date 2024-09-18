@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MpiSchedule.Data;
 
@@ -10,9 +11,11 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    partial class PressScheduleContextModelSnapshot : ModelSnapshot
+    [Migration("20240918182331_AddDetailedJob")]
+    partial class AddDetailedJob
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -23,48 +26,13 @@ namespace MpiSchedule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Customer")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FinishedItemNumber")
-                        .IsRequired()
-                        .HasMaxLength(7)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("LeadTimeDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("MaterialReceiveDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("PressJobId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<int>("PressMonth")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("ReceivedOrder")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("RequestedShipDate")
-                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("BLOB");
-
-                    b.Property<string>("WipItemNumber")
-                        .IsRequired()
-                        .HasMaxLength(7)
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
