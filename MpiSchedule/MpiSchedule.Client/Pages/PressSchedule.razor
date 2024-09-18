@@ -5,6 +5,7 @@
 @inject PressHttpClient Http
 @inject PressJobHttpClient JobHttp
 @inject NavigationManager Navigation
+@inject ToastService Toast
 @implements IAsyncDisposable
 
 <PageTitle>Schedule</PageTitle>
@@ -70,6 +71,8 @@
                     await OnValueChanged(press);
 
                     StateHasChanged();
+
+                    Toast.Notify(new ToastMessage { Type = ToastType.Info, Title = "Job Changed", Message = "Job has changed" });
                 }
             });
 
