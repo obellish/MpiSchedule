@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MpiSchedule.Client.Models;
@@ -10,8 +9,10 @@ public class PressJob
 
     [RegularExpression(@"^\d{7}(?:[-|\W]\d)?$")]
     [StringLength(15)]
+    [Required]
     public string JobNumber { get; set; }
 
+    [Required]
     public string Name { get; set; }
 
     public int PressId { get; set; }

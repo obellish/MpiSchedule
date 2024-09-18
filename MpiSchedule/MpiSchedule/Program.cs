@@ -35,14 +35,6 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 
-//builder.Services.AddAuthentication(
-//        options =>
-//        {
-//            options.DefaultScheme = IdentityConstants.ApplicationScheme;
-//            options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-//        })
-//    .AddIdentityCookies();
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultDatabase") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));

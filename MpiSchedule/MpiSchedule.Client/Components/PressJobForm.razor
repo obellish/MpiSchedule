@@ -67,8 +67,17 @@
             </label>
         </p>
         <br />
-        <button type="button" disabled="@Busy" class="btn btn-warning" @onclick="CancelAsync">Cancel</button>
-        <button type="submit" disabled="@Busy" class="btn btn-primary">Submit</button>
+        @if (!IsAdd)
+        {
+            <button type="button" disabled="@Busy" class="btn btn-danger" @onclick="DeleteAsync">Delete</button>
+            <button type="button" disabled="@Busy" class="btn btn-warning" @onclick="CancelAsync">Cancel</button>
+            <button type="submit" disabled="@Busy" class="btn btn-primary">Submit</button>
+        }
+        else
+        {
+            <button type="button" disabled="@Busy" class="btn btn-warning" @onclick="CancelAsync">Cancel</button>
+            <button type="submit" disabled="@Busy" class="btn btn-primary">Submit</button>
+        }
     </EditForm>
 }
 
@@ -81,6 +90,9 @@
 
     [Parameter]
     public EventCallback CancelRequest { get; set; }
+
+    [Parameter]
+    public EventCallback DeleteRequest { get; set; }
 
     [Parameter]
     public bool IsAdd { get; set; }
@@ -98,4 +110,6 @@
     private Task CancelAsync() => CancelRequest.InvokeAsync();
 
     private Task HandleSubmitAsync(bool isValid) => ValidationResult.InvokeAsync(isValid);
+
+    private Task DeleteAsync() => DeleteRequest.InvokeAsync();
 }

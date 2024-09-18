@@ -12,7 +12,7 @@ public class PressJobController(PressScheduleContext context) : Controller
     [HttpGet]
     public async Task<JsonResult> Index() => Json(await context.Jobs.ToListAsync());
 
-    [HttpGet("{jobId}")]
+    [HttpGet("{jobId:int}")]
     public async Task<IActionResult> GetJob(int jobId)
     {
         var job = await context.FindJob(jobId, true);
@@ -50,5 +50,22 @@ public class PressJobController(PressScheduleContext context) : Controller
         }
 
         return Created();
+    }
+
+    [HttpDelete("{jobId:int}")]
+    public async Task<IActionResult> DeleteJob(int jobId)
+    {
+        var job = await context.FindJob(jobId);
+
+        if (job is not null)
+        {
+            context.Remove(job);
+
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        return NotFound();
     }
 }

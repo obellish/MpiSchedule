@@ -18,6 +18,7 @@
 <MonthlyCalendar TModel="PressJob"
                  Values="jobList"
                  ValueClick="ValueClick"
+                 DayClick="DayClick"
                  GetStartDate="job => job.Date"
                  GetValueContent="job => job.Name"
                  GetBackgroundColor="BackgroundColorForJob"
@@ -25,12 +26,15 @@
 
 <Modal @ref="modal" />
 
+<ConfirmDialog @ref="dialog" />
+
 @code
 {
     private readonly DateTime today = DateTime.Today;
     private readonly List<PressJob> jobList = [];
     private HubConnection? hubConnection;
     private Modal? modal;
+    private ConfirmDialog? dialog;
     private Press? selectedPress;
 
     [SupplyParameterFromQuery(Name = "pressId")]
@@ -120,6 +124,21 @@
             }
 
             jobList.AddRange(selectedPress.Jobs.OrderBy(x => x.Shift).Where(j => j.Date.Month == today.Month));
+        }
+    }
+
+    private async Task DayClick(DateTime date)
+    {
+        if (selectedPress is null)
+        {
+            return;
+        }
+
+        var confirmation = await dialog?.ShowAsync(title: "Add a job", message1: $"Would you like to add a job on {date:MM/dd/yyyy}")!;
+
+        if (confirmation)
+        {
+            Navigation.NavigateTo($"/press-schedule/add?pressId={selectedPress.PressId}&date={date}");
         }
     }
 
