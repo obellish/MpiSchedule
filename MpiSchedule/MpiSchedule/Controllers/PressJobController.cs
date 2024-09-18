@@ -49,7 +49,7 @@ public class PressJobController(PressScheduleContext context) : Controller
             return new UnsupportedMediaTypeResult();
         }
 
-        return Created();
+        return Ok(job.Id);
     }
 
     [HttpDelete("{jobId:int}")]

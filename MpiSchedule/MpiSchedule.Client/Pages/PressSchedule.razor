@@ -60,21 +60,32 @@
             .WithUrl(Navigation.ToAbsoluteUri("/refresh-schedule"))
             .Build();
 
-        hubConnection.On<int>(
-            "RefreshSchedule",
-            async pressId =>
+        hubConnection.On<int, int>("AddJob", 
+            async (pressId, jobId) =>
+        {
+            if (await RefreshState(pressId))
             {
-                if (selectedPress?.PressId == pressId || PressId == pressId)
+                var job = await JobHttp.GetJobAsync(jobId);
+
+                if (job is not null)
                 {
-                    var press = await Http.GetPressAsync(pressId, true);
-
-                    await OnValueChanged(press);
-
-                    StateHasChanged();
-
-                    Toast.Notify(new ToastMessage { Type = ToastType.Info, Title = "Job Changed", Message = "Job has changed" });
+                    Toast.Notify(new ToastMessage { Type = ToastType.Primary, Title = "New job created", HelpText = $"{job.Date:MM/dd/yyyy}", Message = $"Job {job.JobNumber} created" });
                 }
-            });
+            }
+        });
+
+        hubConnection.On<int, int>("EditJob", async (pressId, jobId) =>
+        {
+            if (await RefreshState(pressId))
+            {
+                var job = await JobHttp.GetJobAsync(jobId);
+
+                if (job is not null)
+                {
+                    Toast.Notify(new ToastMessage { Type = ToastType.Info, Title = "Job edited", HelpText = $"{job.Date:MM/dd/yyyy}", Message = $"Job {job.JobNumber} edited" });
+                }
+            }
+        });
 
         await hubConnection.StartAsync();
     }
@@ -153,4 +164,20 @@
     }
 
     private async Task CloseModal() => await modal?.HideAsync()!;
+
+    private async Task<bool> RefreshState(int pressId)
+    {
+        if (selectedPress?.PressId == pressId || PressId == pressId)
+        {
+            var press = await Http.GetPressAsync(pressId, true);
+
+            await OnValueChanged(press);
+
+            StateHasChanged();
+
+            return true;
+        }
+
+        return false;
+    }
 }

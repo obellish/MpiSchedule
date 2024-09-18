@@ -100,12 +100,13 @@
 
         try
         {
-            if (Job is not null)
-            {
-                await Http.CreateJobAsync(Job);
-            }
+            var res = await Http.CreateJobAsync(Job!);
 
-            await hubConnection?.SendAsync("RefreshSchedule", PressId)!;
+            var rawId = await res.Content.ReadAsStringAsync();
+
+            var id = int.Parse(rawId);
+
+            await hubConnection?.SendAsync("AddJob", PressId, id)!;
 
             Navigation.NavigateTo(navigationUrl);
         }
