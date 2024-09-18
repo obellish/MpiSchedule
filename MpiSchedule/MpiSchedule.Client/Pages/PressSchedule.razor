@@ -60,6 +60,8 @@
             .WithUrl(Navigation.ToAbsoluteUri("/refresh-schedule"))
             .Build();
 
+        hubConnection.On<int>("RefreshSchedule", async pressId => await RefreshState(pressId));
+
         hubConnection.On<int, int>("AddJob", 
             async (pressId, jobId) =>
         {

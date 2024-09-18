@@ -90,6 +90,7 @@ else
         {
             busy = true;
             await Http.DeleteJobAsync(JobId);
+            await hubConnection?.SendAsync("RefreshSchedule", Job?.PressId ?? 0)!;
             var navigationUrl = "/press-schedule";
             if (Job is not null)
             {
