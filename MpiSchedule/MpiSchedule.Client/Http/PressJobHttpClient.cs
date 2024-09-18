@@ -12,4 +12,6 @@ public class PressJobHttpClient(HttpClient client) : BaseClient(client)
     public async Task<PressJob?> GetJobAsync(int id) => await Client.GetFromJsonAsync<PressJob>($"api/PressJob/{id}");
 
     public async Task EditJobAsync(PressJob job) => await Client.PatchAsJsonAsync("api/PressJob", job);
+
+    public async Task CreateJobAsync(PressJob job) => await Client.PostAsJsonAsync("api/PressJob", job);
 }

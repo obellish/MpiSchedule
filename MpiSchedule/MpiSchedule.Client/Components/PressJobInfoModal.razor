@@ -1,5 +1,6 @@
 ﻿@using MpiSchedule.Client.Models
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@using MpiSchedule.Client.Http
+@inject PressHttpClient Http
 @inject NavigationManager Navigation
 
 <div>
@@ -11,7 +12,15 @@
 
     <br />
 
+    <p>Press: <code>@PressName</code></p>
+
+    <br />
+
     <p>Scheduled to run: <code>@Job.Date.Date.ToString("MM/dd/yyyy")</code> on <code>@Shift</code> shift</p>
+
+    <br />
+
+    <p>Due date: <code>@Job.DueDate.Date.ToString("MM/dd/yyyy")</code></p>
 
     <br />
 
@@ -21,28 +30,19 @@
 
     <p>Quantity already ran: <code>@Job.QuantityRan</code></p>
 
-    <br />
-
-    <p>Due date: <code>@Job.DueDate.Date.ToString("MM/dd/yyyy")</code></p>
-
-    @if (authenticated)
-    {
-        <div>
+    <AuthorizeView>
+        <Authorized>
             <button class="btn btn-secondary" @onclick="EditJob">Edit</button>
             &nbsp;
-            <button class="btn btn-primary" @onclick="CloseCommand">Close</button>
-        </div>
-    }
-    else
-    {
-        <button class="btn btn-primary" @onclick="CloseCommand">Close</button>
-    }
+        </Authorized>
+    </AuthorizeView>
+    <button class="btn btn-primary" @onclick="CloseCommand">Close</button>
 
 </div>
 
 @code
 {
-    private bool authenticated;
+    private readonly List<Press> presses = [];
 
     [Parameter]
     public PressJob Job { get; set; }
@@ -50,14 +50,17 @@
     [Parameter]
     public EventCallback CloseCommand { get; set; }
 
+    private string PressName => presses.FirstOrDefault(p => p.PressId == Job.PressId)?.Name ?? "Not available";
+
     private string Shift => Job.Shift switch
     {
         Models.Shift.First => "First",
         Models.Shift.Second => "Second",
         Models.Shift.Third => "Third",
+        _ => "Unknown",
     };
 
-    protected override async Task OnInitializedAsync() => authenticated = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated is true;
+    protected override async Task OnInitializedAsync() => presses.AddRange(await Http.GetAllPressesAsync());
 
     private void EditJob() => Navigation.NavigateTo($"/press-schedule/edit/{Job.Id}");
 }

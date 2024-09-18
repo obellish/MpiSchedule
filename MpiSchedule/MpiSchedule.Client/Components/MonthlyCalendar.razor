@@ -72,7 +72,8 @@
 
                 <div class="fade-in monthly-day noselect @cssToday"
                      style="@cssBackground"
-                     ondragover="event.preventDefault();">
+                     ondragover="event.preventDefault();"
+                     @onclick="_ => ClickDayInternal(dayClick)">
                     @(dayCounter.Day.ToString())
                 </div>
                 dayCounter = dayClick.AddDays(1);
@@ -112,8 +113,8 @@
                 var start = startDate.Date < FirstDate ? FirstDate : startDate.Date;
                 var end = endDate.Date >= lastDay ? lastDay.AddDays(-1) : endDate.Date;
 
-                var x = ((start.Day + offsetCell - 1) % 7) + 1;
-                var y = ((start.Day + offsetCell - 1) / 7) + 2;
+                var x = (start.Day + offsetCell - 1) % 7 + 1;
+                var y = (start.Day + offsetCell - 1) / 7 + 2;
                 var s = (int)(end.Date - start.Date).TotalDays + 1;
 
                 string? classPosition = null;
@@ -192,8 +193,8 @@
                         start = start.AddDays(8 - x);
                         end = endDate.Date >= lastDay ? lastDay.AddDays(-1) : endDate.Date;
 
-                        x = ((start.Day + offsetCell - 1) % 7) + 1;
-                        y = ((start.Day + offsetCell - 1) / 7) + 2;
+                        x = (start.Day + offsetCell - 1) % 7 + 1;
+                        y = (start.Day + offsetCell - 1) / 7 + 2;
                         s = (int)(end.Date - start.Date).TotalDays + 1;
 
                         borderClass = string.Empty;

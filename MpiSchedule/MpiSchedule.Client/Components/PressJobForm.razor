@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using MpiSchedule.Client.Http
 @using MpiSchedule.Client.Models
+@inject PressHttpClient Http
 
 <PageTitle>@Mode Job</PageTitle>
 
@@ -20,6 +22,50 @@
                 <InputText @bind-Value="Job.Name" />
             </label>
         </p>
+        <p>
+            <label>
+                Job number:
+                <InputText @bind-Value="Job.JobNumber" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Press:
+                <InputSelect @bind-Value="Job.PressId">
+                    @if (presses is not null)
+                    {
+                        @foreach (var press in presses)
+                        {
+                            <option value="@press.PressId">@press.Name</option>
+                        }
+                    }
+                </InputSelect>
+            </label>
+        </p>
+        <p>
+            <label>
+                Scheduled to run:
+                <InputDate @bind-Value="Job.Date" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Due date:
+                <InputDate @bind-Value="Job.DueDate" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Quantity:
+                <InputNumber @bind-Value="Job.Quantity" />
+            </label>
+        </p>
+        <p>
+            <label>
+                Quantity already ran:
+                <InputNumber @bind-Value="Job.QuantityRan" />
+            </label>
+        </p>
         <br />
         <button type="button" disabled="@Busy" class="btn btn-warning" @onclick="CancelAsync">Cancel</button>
         <button type="submit" disabled="@Busy" class="btn btn-primary">Submit</button>
@@ -28,6 +74,8 @@
 
 @code
 {
+    private List<Press>? presses;
+
     [Parameter]
     public EventCallback<bool> ValidationResult { get; set; }
 
@@ -44,6 +92,8 @@
     public bool Busy { get; set; }
 
     private string Mode => IsAdd ? "Add" : "Edit";
+
+    protected override async Task OnInitializedAsync() => presses = [.. await Http.GetAllPressesAsync()];
 
     private Task CancelAsync() => CancelRequest.InvokeAsync();
 

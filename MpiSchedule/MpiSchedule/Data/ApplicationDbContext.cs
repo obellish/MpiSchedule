@@ -32,7 +32,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                     Name = "User", NormalizedName = "USER", Id = Guid.NewGuid().ToString(),
                     ConcurrencyStamp = Guid.NewGuid().ToString(),
                 },
-                new IdentityRole()
+                new IdentityRole
                 {
                     Name = "Admin", NormalizedName = "ADMIN", Id = Guid.NewGuid().ToString(),
                     ConcurrencyStamp = Guid.NewGuid().ToString(),

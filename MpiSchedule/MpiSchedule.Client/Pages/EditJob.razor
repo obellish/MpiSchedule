@@ -8,7 +8,7 @@
 @inject PressJobHttpClient Http
 @inject NavigationManager Navigation
 @implements IAsyncDisposable
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 
 @if (Job is null && !busy)
 {
@@ -21,7 +21,7 @@ else
                       Job="Job"
                       IsAdd="false"
                       CancelRequest="Cancel"
-                      ValidationResult="async (success) => await ValidationResultAsync(success)"/>
+                      ValidationResult="async (success) => await ValidationResultAsync(success)" />
     </AuthorizeView>
 }
 

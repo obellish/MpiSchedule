@@ -14,7 +14,7 @@ public class PressController(PressScheduleContext context) : Controller
         ? Json(await context.Presses.Include(p => p.Jobs).ToListAsync())
         : Json(await context.Presses.ToListAsync());
 
-    [HttpGet("{pressId}")]
+    [HttpGet("{pressId:int}")]
     public async Task<IActionResult> GetPress(int pressId, bool loadJobs = false)
     {
         var press = await context.FindPress(pressId, loadJobs);

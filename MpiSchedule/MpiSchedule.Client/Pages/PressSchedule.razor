@@ -3,6 +3,7 @@
 @using MpiSchedule.Client.Http
 @using Microsoft.AspNetCore.SignalR.Client
 @inject PressHttpClient Http
+@inject PressJobHttpClient JobHttp
 @inject NavigationManager Navigation
 @implements IAsyncDisposable
 
@@ -10,7 +11,7 @@
 
 <h2>Schedule</h2>
 
-<PressDropdown ValueChanged="OnValueChanged" />
+<PressDropdown Value="selectedPress" ValueChanged="OnValueChanged" />
 
 <br />
 
@@ -57,7 +58,7 @@
                 {
                     var press = await Http.GetPressAsync(selectedPress.PressId, true);
 
-                    OnValueChanged(press);
+                    await OnValueChanged(press);
 
                     StateHasChanged();
                 }
@@ -66,7 +67,7 @@
                 {
                     var press = await Http.GetPressAsync(PressId, true);
 
-                    OnValueChanged(press);
+                    await OnValueChanged(press);
 
                     StateHasChanged();
                 }
@@ -81,7 +82,7 @@
         {
             var press = await Http.GetPressAsync(PressId, true);
 
-            OnValueChanged(press);
+            await OnValueChanged(press);
         }
     }
 
@@ -99,7 +100,7 @@
         _ => "#ffffff",
     };
 
-    private void OnValueChanged(Press? press)
+    private async Task OnValueChanged(Press? press)
     {
         jobList.Clear();
 
@@ -107,6 +108,17 @@
 
         if (selectedPress is not null)
         {
+            if (selectedPress is { PressId: 7, Jobs.Count: 0 })
+            {
+                await JobHttp.CreateJobAsync(new PressJob { Date = DateTime.Today, JobNumber = "3333333-1", Name = "Test Job 1", PressId = 7, Quantity = 20000, Shift = Shift.First });
+                await JobHttp.CreateJobAsync(new PressJob { Date = DateTime.Today, JobNumber = "3333333-2", Name = "Test Job 2", PressId = 7, Quantity = 20000, Shift = Shift.Second });
+                await JobHttp.CreateJobAsync(new PressJob { Date = DateTime.Today, JobNumber = "3333333-3", Name = "Test Job 3", PressId = 7, Quantity = 20000, Shift = Shift.Third });
+
+                var newPress = await Http.GetPressAsync(7, true);
+
+                await OnValueChanged(newPress);
+            }
+
             jobList.AddRange(selectedPress.Jobs.OrderBy(x => x.Shift).Where(j => j.Date.Month == today.Month));
         }
     }
