@@ -46,6 +46,33 @@ public class PressScheduleContext(DbContextOptions<PressScheduleContext> options
         return base.DisposeAsync();
     }
 
+    public async Task SeedJobData()
+    {
+        Jobs.AddRange(
+        [
+            new PressJob
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                DueDate = DateOnly.FromDateTime(DateTime.Today.AddDays(2)), JobNumber = "3333333-1",
+                Name = "Test Job 1", PressId = 7, Quantity = 20000, Shift = Shift.First,
+            },
+            new PressJob
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                DueDate = DateOnly.FromDateTime(DateTime.Today.AddDays(3)), JobNumber = "3333333-2",
+                Name = "Test Job 2", PressId = 7, Quantity = 20000, Shift = Shift.Second, Type = JobType.PrintAndMerge,
+            },
+            new PressJob
+            {
+                Date = DateOnly.FromDateTime(DateTime.Today),
+                DueDate = DateOnly.FromDateTime(DateTime.Today.AddDays(5)), JobNumber = "3333333-3",
+                Name = "Test Job 3", PressId = 7, Quantity = 20000, Shift = Shift.Third,
+            },
+        ]);
+
+        await SaveChangesAsync();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var pressId = 0;

@@ -26,15 +26,15 @@ public class PressJob
 
     public JobType Type { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
-    public DateTime DueDate { get; set; }
+    public DateOnly DueDate { get; set; }
 
     public int Quantity { get; set; }
 
     public int QuantityRan { get; set; }
 
-    public DateTime ReceivedOrder { get; set; } = DateTime.Today;
+    public DateOnly ReceivedOrder { get; set; } = DateOnly.FromDateTime(DateTime.Today);
 
     [MaxLength(7)]
     public string WipItemNumber { get; set; } = string.Empty;
@@ -44,4 +44,6 @@ public class PressJob
 
     [MaxLength(500)]
     public string Notes { get; set; } = string.Empty;
+
+    public bool Completed { get; set; }
 }

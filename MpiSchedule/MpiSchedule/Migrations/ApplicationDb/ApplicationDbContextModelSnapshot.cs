@@ -50,21 +50,21 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.HasData(
                         new
                         {
-                            Id = "0e87d38e-d945-4dc7-a40b-593365e7ca87",
+                            Id = "cb5b19b6-cbf1-4436-9c80-d615b8e2c1c0",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "6d60e3be-1331-4e49-88f7-7d0f71d20650",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            Id = "cd812ae6-a980-47c3-bdea-c3aef1dfb1d2",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "e71a20c1-0b1b-466f-95f4-408332af2595",
+                            Id = "4256d609-3165-4cf6-9949-a5fef1ce5b15",
                             Name = "Developer",
-                            NormalizedName = "DEV"
+                            NormalizedName = "DEVELOPER"
                         });
                 });
 

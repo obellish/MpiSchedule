@@ -38,14 +38,15 @@ namespace MpiSchedule.Migrations
                     PressId = table.Column<int>(type: "INTEGER", nullable: false),
                     Shift = table.Column<int>(type: "INTEGER", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    DueDate = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     QuantityRan = table.Column<int>(type: "INTEGER", nullable: false),
-                    ReceivedOrder = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ReceivedOrder = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     WipItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: false, defaultValue: ""),
                     FinishedItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: false, defaultValue: ""),
                     Notes = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false, defaultValue: ""),
+                    Completed = table.Column<bool>(type: "INTEGER", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
                 },
                 constraints: table =>

@@ -32,11 +32,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 },
                 new IdentityRole
                 {
-                    Name = "Admin", NormalizedName = "ADMIN",
+                    Name = "Manager", NormalizedName = "MANAGER",
                 },
                 new IdentityRole
                 {
-                    Name = "Developer", NormalizedName = "DEV",
+                    Name = "Developer", NormalizedName = "DEVELOPER",
                 });
 
         builder.Entity<ApplicationUser>()

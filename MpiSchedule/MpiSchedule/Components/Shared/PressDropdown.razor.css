@@ -1,0 +1,11 @@
+﻿.press-dropdown, .press-dropdown option {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: .25rem;
+    font-weight: 400;
+    padding: .375rem .75rem;
+    vertical-align: top;
+}

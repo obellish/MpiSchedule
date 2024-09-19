@@ -20,18 +20,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="Components\PressDropdown.razor" />
-	  <_ContentIncludedByDefault Remove="Pages\EditJob.razor" />
 	  <_ContentIncludedByDefault Remove="Pages\PressJobs.razor" />
 	  <_ContentIncludedByDefault Remove="Pages\PressSchedule.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Components\PressDropdown.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\EditJob.razor" />
 	</ItemGroup>
 
 	<ItemGroup>

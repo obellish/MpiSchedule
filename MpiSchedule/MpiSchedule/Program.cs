@@ -37,8 +37,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultDatabase") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddDbContextPool<PressScheduleContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContextFactory<PressScheduleContext>(options => options.UseSqlite(connectionString).EnableSensitiveDataLogging());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -69,6 +69,8 @@ builder.Services.AddHttpClient<PressJobHttpClient>(BaseClient.ConfigureClient(bu
 
 builder.Services.AddSignalR();
 
+builder.Services.AddQuickGridEntityFrameworkAdapter();
+
 builder.Services.AddResponseCompression(
     options => { options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(["application/octet-stream"]); });
 
@@ -77,6 +79,13 @@ var app = builder.Build();
 app.MapHealthChecks("/healthz");
 
 await app.MigrateDatabaseAsync();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    await using var pressScheduleContext = scope.ServiceProvider.GetRequiredService<PressScheduleContext>();
+
+    await pressScheduleContext.SeedJobData();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

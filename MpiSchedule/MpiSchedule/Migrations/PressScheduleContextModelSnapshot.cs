@@ -82,10 +82,13 @@ namespace MpiSchedule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<bool>("Completed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateOnly>("DueDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FinishedItemNumber")
@@ -121,7 +124,7 @@ namespace MpiSchedule.Migrations
                     b.Property<int>("QuantityRan")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("ReceivedOrder")
+                    b.Property<DateOnly>("ReceivedOrder")
                         .HasColumnType("TEXT");
 
                     b.Property<byte[]>("RowVersion")

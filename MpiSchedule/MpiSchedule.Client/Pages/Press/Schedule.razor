@@ -1,4 +1,4 @@
-﻿@page "/press-schedule"
+﻿@page "/Press/Schedule"
 @using MpiSchedule.Client.Models
 @using MpiSchedule.Client.Http
 @using Microsoft.AspNetCore.SignalR.Client
@@ -13,7 +13,7 @@
 <h2>Schedule</h2>
 
 <div>
-    <PressDropdown Value="selectedPress" ValueChanged="OnValueChanged" />
+    <OldPressDropdown Value="selectedPress" ValueChanged="OnValueChanged" />
 
     <AuthorizeView Roles="Manager, Developer">
         <button class="btn btn-secondary" @onclick="AddJob">Add job</button>
@@ -25,7 +25,7 @@
 <MonthlyCalendar TModel="PressJob"
                  Values="jobList"
                  ValueClick="ValueClick"
-                 GetStartDate="job => job.Date"
+                 GetStartDate="job => job.Date.ToDateTime(default)"
                  GetValueContent="job => job.Name"
                  GetBackgroundColor="BackgroundColorForJob"
                  GetForegroundColor="ForegroundColorForJob" />
@@ -98,7 +98,7 @@
         {
             var press = await Http.GetPressAsync(PressId, true);
 
-            await OnValueChanged(press);
+            OnValueChanged(press);
         }
     }
 
@@ -116,7 +116,7 @@
         _ => "#ffffff",
     };
 
-    private async Task OnValueChanged(Press? press)
+    private void OnValueChanged(Press? press)
     {
         jobList.Clear();
 
@@ -124,17 +124,6 @@
 
         if (selectedPress is not null)
         {
-            if (selectedPress is { PressId: 7, Jobs.Count: 0 })
-            {
-                await JobHttp.CreateJobAsync(new PressJob { Date = DateTime.Today, DueDate = DateTime.Today.AddDays(2), JobNumber = "3333333-1", Name = "Test Job 1", PressId = 7, Quantity = 20000, Shift = Shift.First });
-                await JobHttp.CreateJobAsync(new PressJob { Date = DateTime.Today, DueDate = DateTime.Today.AddDays(3), JobNumber = "3333333-2", Name = "Test Job 2", PressId = 7, Quantity = 20000, Shift = Shift.Second, Type = JobType.PrintAndMerge });
-                await JobHttp.CreateJobAsync(new PressJob { Date = DateTime.Today, DueDate = DateTime.Today.AddDays(5), JobNumber = "3333333-3", Name = "Test Job 3", PressId = 7, Quantity = 20000, Shift = Shift.Third });
-
-                var newPress = await Http.GetPressAsync(7, true);
-
-                await OnValueChanged(newPress);
-            }
-
             jobList.AddRange(selectedPress.Jobs.OrderBy(x => x.Shift).Where(j => j.Date.Month == today.Month));
         }
     }
@@ -173,7 +162,7 @@
         {
             var press = await Http.GetPressAsync(pressId, true);
 
-            await OnValueChanged(press);
+            OnValueChanged(press);
 
             StateHasChanged();
 

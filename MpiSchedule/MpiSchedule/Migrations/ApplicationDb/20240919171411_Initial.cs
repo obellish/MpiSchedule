@@ -165,9 +165,9 @@ namespace MpiSchedule.Migrations.ApplicationDb
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0e87d38e-d945-4dc7-a40b-593365e7ca87", null, "User", "USER" },
-                    { "6d60e3be-1331-4e49-88f7-7d0f71d20650", null, "Admin", "ADMIN" },
-                    { "e71a20c1-0b1b-466f-95f4-408332af2595", null, "Developer", "DEV" }
+                    { "4256d609-3165-4cf6-9949-a5fef1ce5b15", null, "Developer", "DEVELOPER" },
+                    { "cb5b19b6-cbf1-4436-9c80-d615b8e2c1c0", null, "User", "USER" },
+                    { "cd812ae6-a980-47c3-bdea-c3aef1dfb1d2", null, "Manager", "MANAGER" }
                 });
 
             migrationBuilder.CreateIndex(

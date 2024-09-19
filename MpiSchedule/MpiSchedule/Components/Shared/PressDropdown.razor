@@ -1,0 +1,48 @@
+﻿@using MpiSchedule.Client.Models
+@using Microsoft.EntityFrameworkCore
+@using MpiSchedule.Data
+@inject IDbContextFactory<PressScheduleContext> DbFactory
+
+<select class="press-dropdown" @bind="PressId" @bind:after="OnValueChanged">
+    <option value="-1">Select...</option>
+    @if (context is not null)
+    {
+        @foreach (var press in context.Presses.Select(p => new { p.Name, p.PressId }))
+        {
+            <option value="@press.PressId">@press.Name</option>
+        }
+    }
+</select>
+
+@code
+{
+    private PressScheduleContext? context;
+
+    [Parameter]
+    public Press? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Press> ValueChanged { get; set; }
+
+    [Parameter]
+    public int PressId { get; set; } = -1;
+
+    protected override async Task OnInitializedAsync() => context = await DbFactory.CreateDbContextAsync();
+
+    private async Task OnValueChanged()
+    {
+        if (context is not null)
+        {
+            Value = await context.FindPress(PressId);
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+
+
+    // if (int.TryParse(e.Value?.ToString(), out var pressId) && context is not null)
+    // {
+    //     Value = await context.FindPress(pressId);
+
+    //     await ValueChanged.InvokeAsync(Value);
+    // }
+}

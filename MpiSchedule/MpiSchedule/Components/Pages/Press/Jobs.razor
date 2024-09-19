@@ -1,0 +1,93 @@
+﻿@page "/Press/Jobs"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.CodeAnalysis.CSharp.Syntax
+@using Microsoft.EntityFrameworkCore
+@using MpiSchedule.Client.Models
+@using MpiSchedule.Data
+@using MpiSchedule.Hubs
+@using SortDirection = Microsoft.AspNetCore.Components.QuickGrid.SortDirection
+@inject IDbContextFactory<PressScheduleContext> DbFactory
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+
+<PageTitle>Press Jobs</PageTitle>
+
+<h2>Press Jobs</h2>
+
+@if (context is not null)
+{
+    <QuickGrid Class="table table-hover table-bordered table-striped" Items="PressJobs" Virtualize="true">
+        <PropertyColumn Property="@(p => p.Press.Name)" Sortable="true" Title="Press">
+            <ColumnOptions>
+                <PressDropdown @bind-Value="pressFilter" PressId="pressFilter?.PressId ?? -1" />
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.Date)" Sortable="true" Title="Run date" Format="MM/dd/yyyy">
+            <ColumnOptions>
+                <DateInput TValue="DateOnly?" @bind-Value="runDateFilter" />
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.DueDate)" Sortable="true" InitialSortDirection="SortDirection.Descending" IsDefaultSortColumn="true" Title="Due date" Format="MM/dd/yyyy">
+            <ColumnOptions>
+                <DateInput TValue="DateOnly?" @bind-Value="dueDateFilter" />
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.JobNumber)" Sortable="true" Title="Job Number" />
+        <PropertyColumn Property="@(p => p.Name)" Title="Customer" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Type)" Title="Type" Sortable="true" />
+        <PropertyColumn Property="@(p => p.Quantity)" Title="Amount to run" Sortable="true" />
+        <PropertyColumn Property="@(p => p.QuantityRan)" Title="Amount already ran" Sortable="true" />
+        <PropertyColumn Property="@(p => p.ReceivedOrder)" Title="Date order received" Sortable="true" Format="MM/dd/yyyy" />
+        <PropertyColumn Property="@(p => p.WipItemNumber)" Title="WIP Item #" />
+        <PropertyColumn Property="@(p => p.FinishedItemNumber)" Title="Finished Item #" />
+        <PropertyColumn Property="@(p => p.Notes)" Title="Notes/Comments" />
+    </QuickGrid>
+}
+
+@code
+{
+    private HubConnection? hubConnection;
+    private PressScheduleContext? context;
+    private Press? pressFilter;
+    private DateOnly? runDateFilter;
+    private DateOnly? dueDateFilter;
+
+    private IQueryable<PressJob>? PressJobs => context?.Jobs
+        .Include(j => j.Press)
+        .Where(p => !p.Completed)
+        .Where(p => pressFilter == null || p.PressId == pressFilter.PressId)
+        .Where(p => runDateFilter == null || p.Date == runDateFilter)
+        .Where(p => dueDateFilter == null || p.DueDate == dueDateFilter);
+
+    public async ValueTask DisposeAsync()
+    {
+        if (context is not null)
+        {
+            await context.DisposeAsync();
+        }
+
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = await DbFactory.CreateDbContextAsync();
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/refresh-schedule"))
+            .Build();
+
+        hubConnection.On<int>(nameof(RefreshScheduleHub.RefreshSchedule),
+            _ =>
+            {
+                StateHasChanged();
+            });
+
+        await hubConnection.StartAsync();
+    }
+}

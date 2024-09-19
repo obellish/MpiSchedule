@@ -25,19 +25,13 @@
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="testing">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Testing
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="press-schedule">
+            <NavLink class="nav-link" href="Press/Schedule">
                 <span class="bi bi-calendar-week-fill-nav-menu" aria-hidden="true"></span> Press Schedules
             </NavLink>
         </div>
         
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="press-schedule/jobs">
+            <NavLink class="nav-link" href="Press/Jobs">
                 <span class="bi bi-clipboard-check-fill-nav-menu" aria-hidden="true"></span>Press Jobs
             </NavLink>
         </div>
@@ -96,8 +90,5 @@
         StateHasChanged();
     }
 
-    public void Dispose()
-    {
-        NavigationManager.LocationChanged -= OnLocationChanged;
-    }
+    public void Dispose() => NavigationManager.LocationChanged -= OnLocationChanged;
 }

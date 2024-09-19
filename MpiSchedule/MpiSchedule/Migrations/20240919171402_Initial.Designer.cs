@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240919123832_Initial")]
+    [Migration("20240919171402_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -85,10 +85,13 @@ namespace MpiSchedule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<bool>("Completed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateOnly>("DueDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FinishedItemNumber")
@@ -124,7 +127,7 @@ namespace MpiSchedule.Migrations
                     b.Property<int>("QuantityRan")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("ReceivedOrder")
+                    b.Property<DateOnly>("ReceivedOrder")
                         .HasColumnType("TEXT");
 
                     b.Property<byte[]>("RowVersion")

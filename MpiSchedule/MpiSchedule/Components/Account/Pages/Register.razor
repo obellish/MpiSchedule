@@ -57,6 +57,19 @@
 </div>
 
 @code {
+
+    private static readonly string[] ManagerEmails =
+    [
+        "shauna@mpilabels.com",
+        "rvaughn@mpilabels.com",
+        "jacobs@mpilabels.com",
+    ];
+
+    private static readonly string[] DeveloperEmails =
+    [
+        "obellish@mpilabels.com",
+    ];
+
     private IEnumerable<IdentityError>? identityErrors;
 
     [SupplyParameterFromForm]
@@ -77,13 +90,23 @@
         var result = await UserManager.CreateAsync(user, Input.Password);
         await UserManager.AddToRoleAsync(user, "USER");
 
+        if (ManagerEmails.Any(email => string.Equals(email, user.NormalizedEmail, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            await UserManager.AddToRoleAsync(user, "MANAGER");
+        }
+
+        if (DeveloperEmails.Any(email => string.Equals(email, user.NormalizedEmail, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            await UserManager.AddToRolesAsync(user, ["DEVELOPER", "MANAGER"]);
+        }
+
         if (!result.Succeeded)
         {
             identityErrors = result.Errors;
             return;
         }
 
-        Logger.LogInformation("User created a new account with password.");
+        Logger.LogInformation("User created a new account with password");
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
