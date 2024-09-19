@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -43,6 +42,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<ApplicationUser>()
             .Property<byte[]>(RowVersion)
             .IsRowVersion();
+
+        builder.Entity<IdentityRole>().Property<byte[]>(RowVersion).IsRowVersion();
             
 
         base.OnModelCreating(builder);

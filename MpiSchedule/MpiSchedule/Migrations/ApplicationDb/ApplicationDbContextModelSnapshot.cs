@@ -34,6 +34,11 @@ namespace MpiSchedule.Migrations.ApplicationDb
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
@@ -45,19 +50,19 @@ namespace MpiSchedule.Migrations.ApplicationDb
                     b.HasData(
                         new
                         {
-                            Id = "1a6c9ea7-f8b3-4ea6-bb57-93ec2f58e26b",
+                            Id = "0e87d38e-d945-4dc7-a40b-593365e7ca87",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "ce141ae9-2adf-4e12-a12c-6c1432077a59",
+                            Id = "6d60e3be-1331-4e49-88f7-7d0f71d20650",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ab290758-8677-42bc-8b11-cb4c865ba94f",
+                            Id = "e71a20c1-0b1b-466f-95f4-408332af2595",
                             Name = "Developer",
                             NormalizedName = "DEV"
                         });

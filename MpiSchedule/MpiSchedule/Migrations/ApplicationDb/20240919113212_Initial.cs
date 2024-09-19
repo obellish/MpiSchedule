@@ -18,6 +18,7 @@ namespace MpiSchedule.Migrations.ApplicationDb
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
@@ -164,9 +165,9 @@ namespace MpiSchedule.Migrations.ApplicationDb
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1a6c9ea7-f8b3-4ea6-bb57-93ec2f58e26b", null, "User", "USER" },
-                    { "ab290758-8677-42bc-8b11-cb4c865ba94f", null, "Developer", "DEV" },
-                    { "ce141ae9-2adf-4e12-a12c-6c1432077a59", null, "Admin", "ADMIN" }
+                    { "0e87d38e-d945-4dc7-a40b-593365e7ca87", null, "User", "USER" },
+                    { "6d60e3be-1331-4e49-88f7-7d0f71d20650", null, "Admin", "ADMIN" },
+                    { "e71a20c1-0b1b-466f-95f4-408332af2595", null, "Developer", "DEV" }
                 });
 
             migrationBuilder.CreateIndex(

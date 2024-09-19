@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240918185048_Initial")]
+    [Migration("20240919113158_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
