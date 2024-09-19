@@ -37,8 +37,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultDatabase") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
-builder.Services.AddDbContextFactory<PressScheduleContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContextPool<PressScheduleContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
