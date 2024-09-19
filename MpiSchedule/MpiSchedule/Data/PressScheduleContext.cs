@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MpiSchedule.Client.Models;
@@ -62,6 +63,9 @@ public class PressScheduleContext(DbContextOptions<PressScheduleContext> options
         modelBuilder.Entity<PressJob>().Property<byte[]>(RowVersion).IsRowVersion();
         modelBuilder.Entity<PressJob>().HasIndex(j => new { j.Id, j.JobNumber })
             .IsUnique();
+        modelBuilder.Entity<PressJob>().Property(p => p.WipItemNumber).HasDefaultValue(string.Empty);
+        modelBuilder.Entity<PressJob>().Property(p => p.FinishedItemNumber).HasDefaultValue(string.Empty);
+        modelBuilder.Entity<PressJob>().Property(p => p.Notes).HasDefaultValue(string.Empty);
 
         base.OnModelCreating(modelBuilder);
     }

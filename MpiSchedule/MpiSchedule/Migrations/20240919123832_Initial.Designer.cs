@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240919120658_Initial")]
+    [Migration("20240919123832_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -92,8 +92,11 @@ namespace MpiSchedule.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FinishedItemNumber")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(7)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<string>("JobNumber")
                         .IsRequired()
@@ -106,8 +109,11 @@ namespace MpiSchedule.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(500)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<int>("PressId")
                         .HasColumnType("INTEGER");
@@ -133,8 +139,11 @@ namespace MpiSchedule.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("WipItemNumber")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(7)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.HasKey("Id");
 

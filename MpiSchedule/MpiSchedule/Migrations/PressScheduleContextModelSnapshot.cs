@@ -89,8 +89,11 @@ namespace MpiSchedule.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FinishedItemNumber")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(7)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<string>("JobNumber")
                         .IsRequired()
@@ -103,8 +106,11 @@ namespace MpiSchedule.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(500)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<int>("PressId")
                         .HasColumnType("INTEGER");
@@ -130,8 +136,11 @@ namespace MpiSchedule.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("WipItemNumber")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(7)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.HasKey("Id");
 

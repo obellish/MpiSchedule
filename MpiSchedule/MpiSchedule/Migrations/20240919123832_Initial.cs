@@ -43,9 +43,9 @@ namespace MpiSchedule.Migrations
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     QuantityRan = table.Column<int>(type: "INTEGER", nullable: false),
                     ReceivedOrder = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    WipItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: true),
-                    FinishedItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: true),
-                    Notes = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    WipItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: false, defaultValue: ""),
+                    FinishedItemNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: false, defaultValue: ""),
+                    Notes = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false, defaultValue: ""),
                     RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
                 },
                 constraints: table =>

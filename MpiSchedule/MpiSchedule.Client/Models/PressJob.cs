@@ -37,11 +37,11 @@ public class PressJob
     public DateTime ReceivedOrder { get; set; } = DateTime.Today;
 
     [MaxLength(7)]
-    public string? WipItemNumber { get; set; }
+    public string WipItemNumber { get; set; } = string.Empty;
 
     [MaxLength(7)]
-    public string? FinishedItemNumber { get; set; }
+    public string FinishedItemNumber { get; set; } = string.Empty;
 
     [MaxLength(500)]
-    public string? Notes { get; set; }
+    public string Notes { get; set; } = string.Empty;
 }

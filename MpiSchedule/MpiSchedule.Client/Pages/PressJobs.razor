@@ -7,45 +7,52 @@
 
 <PageTitle>Press Jobs</PageTitle>
 
-<Grid @ref="grid" TItem="PressJob"
-      DataProvider="PressJobProvider"
-      Class="table table-hover table-bordered table-striped"
-      AllowFiltering="true"
-      Responsive="true"
-      AllowSorting="true">
-    <GridColumns>
-        <GridColumn SortKeySelector="item => item.PressId" TItem="PressJob" HeaderText="Press" PropertyName="Press" Filterable="false">
-            @GetPressName(context.PressId)
-        </GridColumn>
-        <GridColumn TItem="PressJob" HeaderText="Run Date" SortKeySelector="job => job.Date" PropertyName="Date">
-            @context.Date.ToString("MM/dd/yyyy")
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.DueDate" HeaderText="Due Date" PropertyName="DueDate">
-            @context.DueDate.ToString("MM/dd/yyyy")
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.JobNumber" HeaderText="Job Number" PropertyName="JobNumber">
-            @context.JobNumber
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.Name" HeaderText="Name" PropertyName="Name">
-            @context.Name
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.Quantity" HeaderText="Amount to run" PropertyName="Quantity">
-            @context.Quantity
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.ReceivedOrder" HeaderText="Date order received" PropertyName="ReceivedOrder">
-            @context.ReceivedOrder.ToString("MM/dd/yyyy")
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.WipItemNumber" HeaderText="WIP Item #" PropertyName="WipItemNumber">
-            @context.WipItemNumber
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.FinishedItemNumber" HeaderText="Finished Item #" PropertyName="FinishedItemNumber">
-            @context.FinishedItemNumber
-        </GridColumn>
-        <GridColumn TItem="PressJob" SortKeySelector="job => job.Notes" HeaderText="Notes" PropertyName="Notes">
-            @context.Notes
-        </GridColumn>
-    </GridColumns>
-</Grid>
+<div class="table-scroll">
+
+
+    <Grid @ref="grid" TItem="PressJob"
+          DataProvider="PressJobProvider"
+          Class="table table-hover table-bordered table-striped table-scroll"
+          AllowFiltering="true"
+          Responsive="true"
+          AllowSorting="true">
+        <GridColumns>
+            <GridColumn SortKeySelector="item => item.PressId" TItem="PressJob" HeaderText="Press" PropertyName="Press" Filterable="false">
+                @GetPressName(context.PressId)
+            </GridColumn>
+            <GridColumn TItem="PressJob" HeaderText="Run Date" SortKeySelector="job => job.Date" PropertyName="Date">
+                @context.Date.ToString("MM/dd/yyyy")
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.DueDate" HeaderText="Due Date" PropertyName="DueDate">
+                @context.DueDate.ToString("MM/dd/yyyy")
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.JobNumber" HeaderText="Job Number" PropertyName="JobNumber">
+                @context.JobNumber
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.Name" HeaderText="Name" PropertyName="Name">
+                @context.Name
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.Type" HeaderText="Type" PropertyName="Type">
+                @context.Type
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.Quantity" HeaderText="Amount to run" PropertyName="Quantity">
+                @context.Quantity
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.ReceivedOrder" HeaderText="Date order received" PropertyName="ReceivedOrder">
+                @context.ReceivedOrder.ToString("MM/dd/yyyy")
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.WipItemNumber ?? string.Empty" HeaderText="WIP Item #" PropertyName="WipItemNumber">
+                @context.WipItemNumber
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.FinishedItemNumber ?? string.Empty" HeaderText="Finished Item #" PropertyName="FinishedItemNumber">
+                @context.FinishedItemNumber
+            </GridColumn>
+            <GridColumn TItem="PressJob" SortKeySelector="job => job.Notes ?? string.Empty" HeaderText="Notes" PropertyName="Notes">
+                @context.Notes
+            </GridColumn>
+        </GridColumns>
+    </Grid>
+</div>
 
 @code
 {
