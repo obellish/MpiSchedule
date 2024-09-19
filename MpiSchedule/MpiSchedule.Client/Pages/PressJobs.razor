@@ -32,7 +32,7 @@
             @context.Quantity
         </GridColumn>
         <GridColumn TItem="PressJob" SortKeySelector="job => job.ReceivedOrder" HeaderText="Date order received" PropertyName="ReceivedOrder">
-            @context.ReceivedOrder
+            @context.ReceivedOrder.ToString("MM/dd/yyyy")
         </GridColumn>
         <GridColumn TItem="PressJob" SortKeySelector="job => job.WipItemNumber" HeaderText="WIP Item #" PropertyName="WipItemNumber">
             @context.WipItemNumber

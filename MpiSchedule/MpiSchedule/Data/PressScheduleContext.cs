@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MpiSchedule.Client.Models;
 
 namespace MpiSchedule.Data;
 
@@ -56,7 +57,11 @@ public class PressScheduleContext(DbContextOptions<PressScheduleContext> options
         modelBuilder.Entity<Press>().HasData(new Press { Name = "Test press", PressId = ++pressId });
 
         modelBuilder.Entity<Press>().Property<byte[]>(RowVersion).IsRowVersion();
+        modelBuilder.Entity<Press>().HasIndex(p => p.PressId).IsUnique();
+
         modelBuilder.Entity<PressJob>().Property<byte[]>(RowVersion).IsRowVersion();
+        modelBuilder.Entity<PressJob>().HasIndex(j => new { j.Id, j.JobNumber })
+            .IsUnique();
 
         base.OnModelCreating(modelBuilder);
     }

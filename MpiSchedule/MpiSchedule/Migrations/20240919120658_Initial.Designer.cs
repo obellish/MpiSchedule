@@ -11,7 +11,7 @@ using MpiSchedule.Data;
 namespace MpiSchedule.Migrations
 {
     [DbContext(typeof(PressScheduleContext))]
-    [Migration("20240919113158_Initial")]
+    [Migration("20240919120658_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace MpiSchedule.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("MpiSchedule.Data.Press", b =>
+            modelBuilder.Entity("MpiSchedule.Client.Models.Press", b =>
                 {
                     b.Property<int>("PressId")
                         .ValueGeneratedOnAdd()
@@ -79,7 +79,7 @@ namespace MpiSchedule.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MpiSchedule.Data.PressJob", b =>
+            modelBuilder.Entity("MpiSchedule.Client.Models.PressJob", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,9 +146,9 @@ namespace MpiSchedule.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("MpiSchedule.Data.PressJob", b =>
+            modelBuilder.Entity("MpiSchedule.Client.Models.PressJob", b =>
                 {
-                    b.HasOne("MpiSchedule.Data.Press", "Press")
+                    b.HasOne("MpiSchedule.Client.Models.Press", "Press")
                         .WithMany("Jobs")
                         .HasForeignKey("PressId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -157,7 +157,7 @@ namespace MpiSchedule.Migrations
                     b.Navigation("Press");
                 });
 
-            modelBuilder.Entity("MpiSchedule.Data.Press", b =>
+            modelBuilder.Entity("MpiSchedule.Client.Models.Press", b =>
                 {
                     b.Navigation("Jobs");
                 });

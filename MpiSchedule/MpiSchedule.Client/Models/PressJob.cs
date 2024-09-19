@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MpiSchedule.Client.Models;
 
@@ -18,6 +19,9 @@ public class PressJob
 
     public int PressId { get; set; }
 
+    [JsonIgnore]
+    public Press Press { get; set; } = default!;
+
     public Shift Shift { get; set; }
 
     public JobType Type { get; set; }
@@ -30,14 +34,14 @@ public class PressJob
 
     public int QuantityRan { get; set; }
 
-    public DateTime ReceivedOrder { get; set; }
+    public DateTime ReceivedOrder { get; set; } = DateTime.Today;
 
     [MaxLength(7)]
-    public string WipItemNumber { get; set; } = default!;
+    public string? WipItemNumber { get; set; }
 
     [MaxLength(7)]
-    public string FinishedItemNumber { get; set; } = default!;
+    public string? FinishedItemNumber { get; set; }
 
     [MaxLength(500)]
-    public string Notes { get; set; } = default!;
+    public string? Notes { get; set; }
 }

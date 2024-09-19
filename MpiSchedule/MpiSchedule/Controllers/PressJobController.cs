@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MpiSchedule.Client.Models;
 using MpiSchedule.Data;
 
 namespace MpiSchedule.Controllers;
