@@ -1,0 +1,169 @@
+﻿@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<PressScheduleContext> DbFactory
+
+<h1>@Mode Job</h1>
+
+<hr />
+
+@if (Job is not null)
+{
+    <CascadingValue Value="Job" Name="Model">
+        <CascadingValue Value="DbJob" Name="DbModel">
+            <EditForm Model="Job"
+                      FormName="JobForm"
+                      OnInvalidSubmit="async () => await ValidationResult.InvokeAsync(false)"
+                      OnValidSubmit="async () => await ValidationResult.InvokeAsync(true)">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <p>
+                    <label>
+                        Press:
+                        <InputSelect @bind-Value="Job.PressId">
+                            @foreach (var press in presses)
+                            {
+                                <option value="@press.PressId">@press.Name</option>
+                            }
+                        </InputSelect>
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.PressId" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Scheduled to run:
+                        <InputDate @bind-Value="Job.Date" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.Date" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Due date:
+                        <InputDate @bind-Value="Job.DueDate" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.DueDate" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Job number:
+                        <InputText @bind-Value="Job.JobNumber" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.JobNumber" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Name:
+                        <InputText @bind-Value="Job.Name" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.Name" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Type of job:
+                        <InputSelect @bind-Value="Job.Type">
+                            @foreach (var type in Enum.GetValues<JobType>())
+                            {
+                                <option value="@type">@type</option>
+                            }
+                        </InputSelect>
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.Type" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Amount to run:
+                        <InputNumber @bind-Value="Job.Quantity" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.Quantity" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Amount already ran:
+                        <InputNumber @bind-Value="Job.QuantityRan" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.QuantityRan" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Date order received:
+                        <InputDate @bind-Value="Job.ReceivedOrder" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.ReceivedOrder" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        WIP Item #:
+                        <InputText @bind-Value="Job.WipItemNumber" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.WipItemNumber" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Finished Item #:
+                        <InputText @bind-Value="Job.FinishedItemNumber" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.FinishedItemNumber" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Notes:
+                        <InputTextArea @bind-Value="Job.Notes" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.Notes" />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Is completed:
+                        <InputCheckbox @bind-Value="Job.Completed" />
+                        <ConcurrencyField TModel="PressJob"
+                                          Property="job => job.Completed" />
+                    </label>
+                </p>
+                <button type="button" disabled="@Busy" class="btn btn-warning" @onclick="async () => await CancelRequest.InvokeAsync()">Cancel</button>
+                <button type="submit" disabled="@Busy" class="btn btn-primary">Submit</button>
+            </EditForm>
+        </CascadingValue>
+    </CascadingValue>
+}
+
+@code
+{
+    private readonly List<Press> presses = [];
+
+    [Parameter]
+    public EventCallback<bool> ValidationResult { get; set; }
+
+    [Parameter]
+    public EventCallback CancelRequest { get; set; }
+
+    [Parameter]
+    public bool IsAdd { get; set; }
+
+    [Parameter]
+    public PressJob? Job { get; set; }
+
+    [Parameter]
+    public PressJob? DbJob { get; set; }
+
+    [Parameter]
+    public bool Busy { get; set; }
+
+    private string Mode => IsAdd ? "Add" : "Edit";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+
+        presses.AddRange(await context.Presses.ToListAsync());
+    }
+}
